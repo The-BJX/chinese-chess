@@ -1,5 +1,6 @@
 package chinese_chess;
 
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -19,6 +20,8 @@ public class GraphicElements {
     String StyleOfMiddleBoard;
 
     Pane BoardSurface;//真正行棋的地方，刷新棋盘的时候clear(), 然后把棋子一个个加回来
+
+    Button NewGame, LoadFromSave;
 
     Label WhosTurn;
 }

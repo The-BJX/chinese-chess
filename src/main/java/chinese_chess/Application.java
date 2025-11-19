@@ -1,15 +1,26 @@
 package chinese_chess;
 
+import data.PieceType;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import pieces.Piece;
+
+import java.security.cert.TrustAnchor;
 
 public class Application extends javafx.application.Application {
     private double BOARD_RATIO = 1/1.1;
@@ -19,9 +30,7 @@ public class Application extends javafx.application.Application {
     @Override
     public void start(Stage primaryStage) {
 
-        initGame(TypeOfInit.General);
         initGraphics();
-
 
         ChangeListener<Number> sizeListener = new ChangeListener<Number>() {
             @Override
@@ -104,9 +113,16 @@ public class Application extends javafx.application.Application {
         elements.bLabel.setMaxWidth((elements.GameRoot.getWidth()- BoardWidth)/2-2*MENU_PADDING);
         elements.rLabel.setMaxWidth((elements.GameRoot.getWidth()- BoardWidth)/2-2*MENU_PADDING);
         elements.gLabel.setMaxWidth((elements.GameRoot.getWidth()- BoardWidth)/2-2*MENU_PADDING);
+;
+
 
         //画棋盘
-        drawBoard(BoardWidth/10);
+        double GridWidth = BoardWidth/10;
+        drawBoard(GridWidth);
+
+        //画棋子
+        elements.BoardSurface.getChildren().clear();
+        drawPiece(0,0,PieceType.GENERAL,GridWidth,Color.BLACK);
     }
 
 
@@ -167,7 +183,6 @@ public class Application extends javafx.application.Application {
         elements.StyleOfMiddleBoard = String.format("-fx-font-size: %f",0.6*GridWidth);
         elements.Chuhe.setStyle(elements.StyleOfMiddleBoard);
         elements.Hanjie.setStyle(elements.StyleOfMiddleBoard);
-        System.out.printf("%f %f\n",elements.Chuhe.getWidth(),elements.Chuhe.getHeight());
 
         elements.Chuhe.setLayoutX(2*GridWidth-elements.Chuhe.getWidth()/2);
         elements.Chuhe.setLayoutY(GridWidth/2-elements.Chuhe.getHeight()/2);
@@ -176,6 +191,8 @@ public class Application extends javafx.application.Application {
 
     }
     void initGraphics(){
+
+
         elements.WindowRoot = new Pane();
         elements.WindowRoot.setStyle("-fx-background-color: black");
 
@@ -248,10 +265,18 @@ public class Application extends javafx.application.Application {
             elements.ChessBoard.getChildren().add(elements.CrossLine[i]);
         }
 
-        elements.WhosTurn = new Label("黑方行棋");
+        elements.WhosTurn = new Label("");
         elements.WhosTurn.setStyle("-fx-font-size: 16; -fx-text-fill: black;");
         elements.gLabel.setWrapText(true);
         elements.GameMenu.getChildren().add(elements.WhosTurn);
+
+        elements.NewGame = new Button("新游戏");
+        elements.NewGame.setOnAction(event -> {initGame(TypeOfInit.General);});
+        elements.GameMenu.getChildren().add(elements.NewGame);
+        elements.LoadFromSave = new Button("加载残局");
+        elements.LoadFromSave.setOnAction(event -> {initGame(TypeOfInit.FromSave);});
+        elements.GameMenu.getChildren().add(elements.LoadFromSave);
+
 
         elements.BoardSurface = new Pane();
         elements.ChessBoard.getChildren().add(elements.BoardSurface);
@@ -271,13 +296,65 @@ public class Application extends javafx.application.Application {
         elements.ChessBoard.getChildren().add(elements.PaneHanjie);
         elements.PaneChuhe.getChildren().add(elements.Chuhe);
         elements.PaneHanjie.getChildren().add(elements.Hanjie);
+
     }
 
     void initGame(TypeOfInit type){
         if(type==TypeOfInit.General){
-
+            System.out.println("Starting New Game");
+            elements.GameMenu.getChildren().remove(elements.NewGame);
+            elements.GameMenu.getChildren().remove(elements.LoadFromSave);
+            elements.WhosTurn.setText("黑方行棋");
         }else if(type==TypeOfInit.FromSave){
-
+            System.out.println("Starting From Save");
+            elements.GameMenu.getChildren().remove(elements.NewGame);
+            elements.GameMenu.getChildren().remove(elements.LoadFromSave);
         }
+    }
+
+    void drawPiece(int x, int y, PieceType type, double GridWidth, Color side){
+        Circle tmp = new Circle();
+        tmp.setFill(Color.web("#FFD963"));
+        tmp.setRadius(GridWidth*0.4);
+        tmp.setLayoutX((x+1)*GridWidth);
+        tmp.setLayoutY((y+1)*GridWidth);
+        tmp.setStroke(Paint.valueOf("#000000"));
+        tmp.setStrokeWidth(4);
+
+        Label tmplabel;
+        switch (type){
+            case GENERAL:
+                tmplabel = new Label("将");
+                break;
+
+            default:
+                tmplabel = new Label("");
+        }
+
+        /*for(String u:Font.getFontNames()){
+            System.out.println(u);
+        }*/
+
+        Font tmpfont = Font.font("华文隶书",GridWidth/1.9);
+        //tmpfont.
+
+        tmplabel.setPrefWidth(GridWidth);
+        tmplabel.setPrefHeight(GridWidth);
+        tmplabel.setAlignment(Pos.CENTER);
+        tmplabel.setFont(tmpfont);
+        tmplabel.setLayoutX((x+0.5)*GridWidth);
+        tmplabel.setLayoutY((y+0.68)*GridWidth);
+        tmplabel.setMouseTransparent(true);
+
+        if(side==Color.RED)tmplabel.setTextFill(Color.web("#df0000"));
+        if(side==Color.BLACK)tmplabel.setTextFill(Color.BLACK);
+
+        tmp.setOnMouseClicked(event -> {
+            System.out.println("Clicked");
+        });
+
+        elements.BoardSurface.getChildren().add(tmp);
+        elements.BoardSurface.getChildren().add(tmplabel);
+
     }
 }
