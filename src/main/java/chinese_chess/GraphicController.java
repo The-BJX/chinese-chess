@@ -12,8 +12,14 @@ import javafx.stage.Stage;
 
 public class GraphicController {
     static private double MENU_PADDING = ConstantValues.MENU_PADDING;
+    private static GridPoint Selection = new GridPoint(-1,-1);
 
-
+    static GridPoint getSelection(){
+        return Selection;
+    }
+    static void setSelection(GridPoint u){
+        Selection = u;
+    }
     static void initGraphics(Stage stage, GraphicElements elements){
         elements.WindowRoot = new Pane();
         elements.WindowRoot.setStyle("-fx-background-color: black");
@@ -26,6 +32,11 @@ public class GraphicController {
         // 创建一个固定长宽比的容器
         elements.ChessBoard = new Pane();
         elements.ChessBoard.setStyle("-fx-background-color: burlywood; -fx-border-color: navy;");
+        elements.ChessBoard.setOnMouseClicked(mouseEvent -> {
+            setSelection(new GridPoint(-1,-1));
+            System.out.println("Selection canceled when clicking board");
+            refreshWindow(elements);
+        });
 
         Label label = new Label("chessboard");
         label.setLayoutX(10);
@@ -162,5 +173,6 @@ public class GraphicController {
         //画棋子
         elements.BoardSurface.getChildren().clear();
         RenderBoard.drawPiece(elements,0,0, PieceType.GENERAL,GridWidth, Color.BLACK);
+        RenderBoard.drawPiece(elements,1,0, PieceType.GENERAL,GridWidth, Color.RED);
     }
 }

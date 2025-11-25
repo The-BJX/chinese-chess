@@ -73,15 +73,19 @@ public class RenderBoard {
         elements.Hanjie.setLayoutY(GridWidth/2-elements.Hanjie.getHeight()/2);
 
     }
+
     public static void drawPiece(GraphicElements elements, int x, int y, PieceType type, double GridWidth, Color side){
         Circle tmp = new Circle();
         tmp.setFill(Color.web("#FFD963"));
         tmp.setRadius(GridWidth*0.4);
-        tmp.setLayoutX((x+1)*GridWidth);
-        tmp.setLayoutY((y+1)*GridWidth);
+        tmp.setLayoutX((y+1)*GridWidth);
+        tmp.setLayoutY((x+1)*GridWidth);
         tmp.setStroke(Paint.valueOf("#000000"));
-        tmp.setStrokeWidth(4);
-
+        if(GraphicController.getSelection().equals(new GridPoint(x,y))){
+            tmp.setStrokeWidth(6);
+        }else{
+            tmp.setStrokeWidth(4);
+        }
         Label tmplabel;
         switch (type){
             case GENERAL:
@@ -103,16 +107,24 @@ public class RenderBoard {
         tmplabel.setPrefHeight(GridWidth);
         tmplabel.setAlignment(Pos.CENTER);
         tmplabel.setFont(tmpfont);
-        tmplabel.setLayoutX((x+0.5)*GridWidth);
-        tmplabel.setLayoutY((y+0.68)*GridWidth);
+        tmplabel.setLayoutX((y+0.5)*GridWidth);
+        tmplabel.setLayoutY((x+0.68)*GridWidth);
         tmplabel.setMouseTransparent(true);
 
         if(side==Color.RED)tmplabel.setTextFill(Color.web("#df0000"));
         if(side==Color.BLACK)tmplabel.setTextFill(Color.BLACK);
 
         tmp.setOnMouseClicked(event -> {
-            System.out.println("Clicked");
-            tmp.setStrokeWidth(6);
+            if(GraphicController.getSelection().equals(new GridPoint(x,y))){
+                GraphicController.setSelection(new GridPoint(-1,-1));
+                System.out.printf("Selection Canceled\n");
+                GraphicController.refreshWindow(elements);
+            }else{
+                GraphicController.setSelection(new GridPoint(x,y));
+                System.out.printf("Selected %d %d\n",x,y);
+                GraphicController.refreshWindow(elements);
+            }
+            event.consume();
         });
 
         elements.BoardSurface.getChildren().add(tmp);
