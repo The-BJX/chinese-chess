@@ -1,5 +1,6 @@
 package Core;
 
+import data.InitialPositions;
 import data.Side;
 import data.Position;
 import pieces.GeneralPiece;
@@ -20,8 +21,8 @@ public class Board {
     }
 
     private void initializeBoard(){
-        setPieceAt(initialPositions.blackGeneral, new GeneralPiece(Side.BLACK));
-        setPieceAt(initialPositions.redGeneral, new GeneralPiece(Side.RED));
+        setPieceAt(InitialPositions.blackGeneral, new GeneralPiece(Side.BLACK));
+        setPieceAt(InitialPositions.redGeneral, new GeneralPiece(Side.RED));
     }
 
     public Piece getPieceAt(Position position) {

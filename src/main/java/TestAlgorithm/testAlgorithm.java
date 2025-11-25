@@ -21,7 +21,6 @@ public class testAlgorithm {
             System.out.println("(" + pos.row + "," + pos.col + ")");
         }
 
-        tempPiece.select(game.getBoard());
 
 
     }

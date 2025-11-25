@@ -50,17 +50,6 @@ public abstract class Piece {
         return currentPosition;
     }
 
-    public void select(Board board){
-        if(!isSelected) isSelected=true;
-    }
-
-    public void deselect(){
-        if(isSelected) isSelected=false;
-    }
-
-    public boolean isSelected(){
-        return isSelected;
-    }
 
 
 }

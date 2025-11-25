@@ -54,7 +54,6 @@ public class GeneralPiece extends Piece{
             }
         }
 
-        //TODO 将军沿着棋盘斜线走
 
         final Position redPalaceCenter=new Position(8,4);
         final Position blackPalaceCenter=new Position(1,4);
@@ -73,47 +72,59 @@ public class GeneralPiece extends Piece{
             }
         }
 
+        boolean canMoveDiagonally=true;
         if(side == Side.RED){
             for(Position pos:legalMoves){
                 if(redPalaceCenter.equals(pos)){
-                    return legalMoves;
+                    canMoveDiagonally=false;
                 }
             }
-            if(board.getPieceAt(redPalaceCenter).side == Side.BLACK||board.getPieceAt(redPalaceCenter)==null){
-                legalMoves.add(redPalaceCenter);
-                return legalMoves;
+            if(canMoveDiagonally){
+                if(board.getPieceAt(redPalaceCenter).side == Side.BLACK||board.getPieceAt(redPalaceCenter)==null){
+                    legalMoves.add(redPalaceCenter);
+                }
             }
         }
-        if(side == Side.BLACK){
+        else{
             for(Position pos:legalMoves){
                 if(blackPalaceCenter.equals(pos)){
-                    return legalMoves;
+                    canMoveDiagonally=false;
                 }
             }
-            if(board.getPieceAt(blackPalaceCenter)==null||board.getPieceAt(blackPalaceCenter).side == Side.RED){
-                legalMoves.add(blackPalaceCenter);
-                return legalMoves;
+            if(canMoveDiagonally){
+                if(board.getPieceAt(blackPalaceCenter).side == Side.RED||board.getPieceAt(blackPalaceCenter)==null){
+                    legalMoves.add(blackPalaceCenter);
+                }
             }
         }
 
 
-
-
-
-
-
-        //TODO The situation where the two generals face each other directly without any pieces in between
-
-
-
-
+        //The situation where the two generals face each other directly without any pieces in between
+        // scan upwards
+        for (int r = currentRow - 1; r >= 0; r--) {
+            Position p = new Position(r, currentCol);
+            Piece tempPiece = board.getPieceAt(p);
+            if (tempPiece == null) continue;
+            // first non-empty piece encountered
+            if (tempPiece.pieceType == PieceType.GENERAL && tempPiece.side != this.side) {
+                legalMoves.add(p);
+            }
+            break;
+        }
+        // scan downwards
+        for (int r = currentRow + 1; r < Board.ROWS; r++) {
+            Position p = new Position(r, currentCol);
+            Piece tempPiece = board.getPieceAt(p);
+            if (tempPiece == null) continue;
+            if (tempPiece.pieceType == PieceType.GENERAL && tempPiece.side != this.side) {
+                legalMoves.add(p);
+            }
+            break;
+        }
 
 
         return legalMoves;
     }
-
-
-
 
 
 }
