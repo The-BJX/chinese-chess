@@ -89,7 +89,8 @@ public class RenderBoard {
         Label tmplabel;
         switch (type){
             case GENERAL:
-                tmplabel = new Label("将");
+                if(side==Color.BLACK)tmplabel = new Label("將");
+                else tmplabel = new Label("帥");
                 break;
 
             default:
