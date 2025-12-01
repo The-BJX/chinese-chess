@@ -44,6 +44,15 @@ public class Board {
         for(Position pos: InitialPositions.redSoldiers){
             setPieceAt(pos, new pieces.SoldierPiece(Side.RED));
         }
+
+        //Place cannons at their initial positions
+        for(Position pos: InitialPositions.blackCannon){
+            setPieceAt(pos, new pieces.CannonPiece(Side.BLACK));
+        }
+        for(Position pos: InitialPositions.redCannon){
+            setPieceAt(pos, new pieces.CannonPiece(Side.RED));
+        }
+
     }
 
     public Piece getPieceAt(Position position) {
