@@ -14,6 +14,9 @@ public class testAlgorithm {
         game.printBoard();
 
         System.out.printf("Now it is %s's turn",game.getBoard().getCurrentTurn());
+        if(game.getBoard().isGeneralInCheck(game.getBoard().getCurrentTurn())){
+            System.out.println(" -- Check!");
+        }
 
 
         Scanner sc= new Scanner(System.in);
@@ -43,6 +46,9 @@ public class testAlgorithm {
                 }
             }
             System.out.printf("Now it is %s's turn",game.getBoard().getCurrentTurn());
+            if(game.getBoard().isGeneralInCheck(game.getBoard().getCurrentTurn())){
+                System.out.println(" -- Check!");
+            }
             System.out.println();
         }
 

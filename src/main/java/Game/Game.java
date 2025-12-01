@@ -61,6 +61,19 @@ public class Game{
                     selectedPiece.isSelected=false;
                     //Switch turn
                     board.switchTurn();
+                    System.out.println("Move successful!");
+
+                    int status= board.judgeGameOver();
+                    if(status==1){
+                        System.out.println("Red wins!");
+                    }
+                    else if(status==2){
+                        System.out.println("Black wins!");
+                    }
+                    else if(status==0){
+                        System.out.println("Draw!");
+                    }
+
                 }
                 else{
                     //Deselect the piece if the move is illegal

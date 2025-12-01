@@ -70,11 +70,35 @@ public class Board {
                 }
             }
         }
-        return threatenedPositions;
+
+        //remove duplicates in threatenedPositions
+        List<Position> uniqueThreatenedPositions=new java.util.ArrayList<>();
+        for(Position pos: threatenedPositions){
+            boolean isDuplicate=false;
+            for(Position uniquePos: uniqueThreatenedPositions){
+                if(pos.equals(uniquePos)){
+                    isDuplicate=true;
+                    break;
+                }
+            }
+            if(!isDuplicate){
+                uniqueThreatenedPositions.add(pos);
+            }
+        }
+        return uniqueThreatenedPositions;
     }
 
 
-    //TODO return isChecked boolean
+    public boolean isGeneralInCheck(Side side){
+        Position generalPosition=getGeneralPosition(side);
+        List<Position> threatenedPositions=getThreatenedPositions(side);
+        for(Position pos: threatenedPositions){
+            if(pos.equals(generalPosition)){
+                return true;
+            }
+        }
+        return false;
+    }
 
     public void movePiece(Position fromPosition, Position toPosition) {
         int fromRow=fromPosition.getRow();
@@ -89,6 +113,20 @@ public class Board {
 
 
         //TODO output data log should be added here
+    }
+
+    public int judgeGameOver(){
+        if(getThreatenedPositions(currentTurn)==null){
+            if(isGeneralInCheck(currentTurn)){
+                //Current player is checkmated
+                return currentTurn== Side.RED? 2:1; //1 for Red wins, 2 for Black wins
+            }
+            else{
+                //Stalemate
+                return 0; //0 for draw
+            }
+        }
+        return -1; //-1 for game not over
     }
 
     public void setPieceAt(Position position, Piece piece) {
