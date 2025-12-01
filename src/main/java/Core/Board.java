@@ -33,8 +33,17 @@ public class Board {
     }
 
     private void initializeBoard(){
+        // Place generals at their initial positions
         setPieceAt(InitialPositions.blackGeneral, new GeneralPiece(Side.BLACK));
         setPieceAt(InitialPositions.redGeneral, new GeneralPiece(Side.RED));
+
+        //Place soldiers at their initial positions
+        for(Position pos: InitialPositions.blackSoldiers){
+            setPieceAt(pos, new pieces.SoldierPiece(Side.BLACK));
+        }
+        for(Position pos: InitialPositions.redSoldiers){
+            setPieceAt(pos, new pieces.SoldierPiece(Side.RED));
+        }
     }
 
     public Piece getPieceAt(Position position) {
