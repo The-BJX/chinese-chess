@@ -53,6 +53,38 @@ public class Board {
             setPieceAt(pos, new pieces.CannonPiece(Side.RED));
         }
 
+        //Place advisors at their initial positions
+        for(Position pos: InitialPositions.blackAdvisor){
+            setPieceAt(pos, new pieces.AdvisorPiece(Side.BLACK));
+        }
+        for(Position pos: InitialPositions.redAdvisor){
+            setPieceAt(pos, new pieces.AdvisorPiece(Side.RED));
+        }
+
+        //Place elephants at their initial positions
+        for(Position pos: InitialPositions.blackElephants){
+            setPieceAt(pos, new pieces.ElephantPiece(Side.BLACK));
+        }
+        for(Position pos: InitialPositions.redElephants){
+            setPieceAt(pos, new pieces.ElephantPiece(Side.RED));
+        }
+
+        //Place horses at their initial positions
+        for(Position pos: InitialPositions.blackHorses){
+            setPieceAt(pos, new pieces.HorsePiece(Side.BLACK));
+        }
+        for(Position pos: InitialPositions.redHorses){
+            setPieceAt(pos, new pieces.HorsePiece(Side.RED));
+        }
+
+        //Place chariots at their initial positions
+        for(Position pos: InitialPositions.blackChariots){
+            setPieceAt(pos, new pieces.ChariotPiece(Side.BLACK));
+        }
+        for(Position pos: InitialPositions.redChariots){
+            setPieceAt(pos, new pieces.ChariotPiece(Side.RED));
+        }
+
     }
 
     public Piece getPieceAt(Position position) {
