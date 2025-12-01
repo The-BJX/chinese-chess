@@ -20,4 +20,8 @@ public class Position {
         return this.row==other.row && this.col==other.col;
     }
 
+    public boolean inBoardBounds(){
+        return row>=0 && row<10 && col>=0 && col<9;
+    }
+
 }
