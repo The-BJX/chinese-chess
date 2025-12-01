@@ -35,7 +35,9 @@ public class GeneralPiece extends Piece{
         }
         return false;
     }
-    public List<Position> getLegalMoves(Board board, Position currentPosition) {
+
+
+    public List<Position> getUnfilteredLegalMoves(Board board, Position currentPosition) {
         int currentRow = currentPosition.row;
         int currentCol = currentPosition.col;
         List<Position> legalMoves = new java.util.ArrayList<>();
@@ -44,6 +46,7 @@ public class GeneralPiece extends Piece{
         for (int[] dir : directions) {
             int tempRow = currentRow + dir[0];
             int tempCol = currentCol + dir[1];
+            if (tempRow < 0 || tempRow >= Board.ROWS || tempCol < 0 || tempCol >= Board.COLS) continue;
             Position tempPosition = new Position(tempRow, tempCol);
 
             if (isInPalace(tempPosition)) {
@@ -59,11 +62,12 @@ public class GeneralPiece extends Piece{
         final Position blackPalaceCenter=new Position(1,4);
 
 
-        if(side == Side.RED&&currentPosition.equals(redPalaceCenter)|| side == Side.BLACK&&currentPosition.equals(blackPalaceCenter)){
+        if((side == Side.RED && currentPosition.equals(redPalaceCenter))|| (side == Side.BLACK && currentPosition.equals(blackPalaceCenter))){
             int[][] diagonalDirections={{1,1},{1,-1},{-1,1},{-1,-1}};
             for(int[] dir:diagonalDirections){
                 int tempRow=currentRow+dir[0];
                 int tempCol=currentCol+dir[1];
+                if (tempRow < 0 || tempRow >= Board.ROWS || tempCol < 0 || tempCol >= Board.COLS) continue;
                 Position tempPosition=new Position(tempRow,tempCol);
                 Piece targetPiece=board.getPieceAt(tempPosition);
                 if(targetPiece==null||targetPiece.side !=this.side){
@@ -80,7 +84,8 @@ public class GeneralPiece extends Piece{
                 }
             }
             if(canMoveDiagonally){
-                if(board.getPieceAt(redPalaceCenter).side == Side.BLACK||board.getPieceAt(redPalaceCenter)==null){
+                Piece p = board.getPieceAt(redPalaceCenter);
+                if(p==null || p.side == Side.BLACK){
                     legalMoves.add(redPalaceCenter);
                 }
             }
@@ -92,7 +97,8 @@ public class GeneralPiece extends Piece{
                 }
             }
             if(canMoveDiagonally){
-                if(board.getPieceAt(blackPalaceCenter).side == Side.RED||board.getPieceAt(blackPalaceCenter)==null){
+                Piece p = board.getPieceAt(blackPalaceCenter);
+                if(p==null || p.side == Side.RED){
                     legalMoves.add(blackPalaceCenter);
                 }
             }
