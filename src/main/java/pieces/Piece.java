@@ -4,11 +4,12 @@ import Core.Board;
 import data.Side;
 import data.PieceType;
 import data.Position;
+import Game.Game;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Piece {
+public abstract class Piece {
     public final Side side;
     public final PieceType pieceType;
 
@@ -21,12 +22,6 @@ public class Piece {
         this.pieceType=pieceType;
     }
 
-    //protected abstract List<Position> getUnfilteredLegalMoves(Board board, Position currentPosition);
-
-    // Public wrapper so other packages (for example Board) can ask for unfiltered moves
-    public List<Position> getUnfilteredMoves(Board board, Position currentPosition) {
-        return getUnfilteredLegalMoves(board, currentPosition);
-    }
 
     public List<Position> getLegalMoves(Board board, Position currentPosition){
         List<Position> unfiltered = getUnfilteredLegalMoves(board, currentPosition);
@@ -41,21 +36,18 @@ public class Piece {
             Piece capturedPiece = board.getPieceAt(toPos);
 
             // Apply move
-            board.setPieceAt(toPos, movingPiece);
-            board.setPieceAt(currentPosition, null);
+            board.movePiece(currentPosition,toPos);
+            //board.setPieceAt(toPos, movingPiece);
+            //board.setPieceAt(currentPosition, null);
 
             // After applying, check whether own general is threatened by opponent using unfiltered moves
             Position ownGeneralPos = board.getGeneralPosition(this.side);
             boolean isInCheck = false;
-            if (ownGeneralPos != null) {
-                List<Position> threatened = board.getThreatenedPositions(this.side);
-                for (Position p : threatened) {
-                    if (p.equals(ownGeneralPos)) {
-                        isInCheck = true;
-                        break;
-                    }
-                }
-            }
+
+            List<Position> threatened = board.getThreatenedPositions(this.side);
+            isInCheck = Game.positionInList(ownGeneralPos,threatened);
+
+
 
             // Undo move
             board.setPieceAt(currentPosition, movingPiece);
@@ -69,14 +61,7 @@ public class Piece {
         return legalMoves;
     }
 
-    protected List<Position> getUnfilteredLegalMoves(Board board, Position currentPosition) {
-        if(this.pieceType==PieceType.GENERAL){
-            GeneralPiece generalPiece=new GeneralPiece(this.side);
-            return generalPiece.getUnfilteredLegalMoves(board,currentPosition);
-        }
-        return null;
-        //TODO Add other piece types here in the future
-    }
+    public abstract List<Position> getUnfilteredLegalMoves(Board board, Position currentPosition);
 
     public void setCurrentPosition(Position position){
         this.currentPosition=position;

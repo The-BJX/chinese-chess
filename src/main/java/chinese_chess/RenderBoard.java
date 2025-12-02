@@ -1,6 +1,7 @@
 package chinese_chess;
 
 import data.PieceType;
+import data.Position;
 import data.Side;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -82,7 +83,7 @@ public class RenderBoard {
         tmp.setLayoutX((y+1)*GridWidth);
         tmp.setLayoutY((x+1)*GridWidth);
         tmp.setStroke(Paint.valueOf("#000000"));
-        if(GraphicController.getSelection().equals(new GridPoint(x,y))){
+        if(elements.game.getBoard().getSelectedPosition()!=null&&elements.game.getBoard().getSelectedPosition().equals(new Position(x,y))){
             tmp.setStrokeWidth(6);
         }else{
             tmp.setStrokeWidth(4);
@@ -93,7 +94,18 @@ public class RenderBoard {
                 if(side==Side.BLACK)tmplabel = new Label("將");
                 else tmplabel = new Label("帥");
                 break;
-
+            case ADVISOR:
+                if(side==Side.BLACK)tmplabel = new Label("士");
+                else tmplabel = new Label("仕");
+                break;
+            case CHARIOT:
+                if(side==Side.BLACK)tmplabel = new Label("车");
+                else tmplabel = new Label("车");
+                break;
+            case SOLDIER:
+                if(side==Side.BLACK)tmplabel = new Label("兵");
+                else tmplabel = new Label("卒");
+                break;
             default:
                 tmplabel = new Label("");
         }
@@ -117,15 +129,7 @@ public class RenderBoard {
         if(side==Side.BLACK)tmplabel.setTextFill(Color.BLACK);
 
         tmp.setOnMouseClicked(event -> {
-            if(GraphicController.getSelection().equals(new GridPoint(x,y))){
-                GraphicController.setSelection(new GridPoint(-1,-1));
-                System.out.printf("Selection Canceled\n");
-                GraphicController.refreshWindow(elements);
-            }else{
-                GraphicController.setSelection(new GridPoint(x,y));
-                System.out.printf("Selected %d %d\n",x,y);
-                GraphicController.refreshWindow(elements);
-            }
+            elements.game.touchPosition(new Position(x,y));
             event.consume();
         });
 

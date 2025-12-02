@@ -113,7 +113,7 @@ public class Board {
                 if(piece!=null && piece.side!=side){
                     Position piecePosition=new Position(r,c);
                     // Use unfiltered moves here to determine threats so we don't recurse through getLegalMoves
-                    List<Position> pieceMoves=piece.getUnfilteredMoves(this,piecePosition);
+                    List<Position> pieceMoves=piece.getUnfilteredLegalMoves(this,piecePosition);
                     if(pieceMoves!=null){
                         threatenedPositions.addAll(pieceMoves);
                     }

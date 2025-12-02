@@ -1,6 +1,7 @@
 package chinese_chess;
 
 import Core.Board;
+import Game.Game;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.Scene;
@@ -12,7 +13,7 @@ public class Application extends javafx.application.Application {
     @Override
     public void start(Stage primaryStage) {
 
-        elements.board = new Board();
+        elements.game=new Game();
         GraphicController.initGraphics(primaryStage,elements);
 
         ChangeListener<Number> sizeListener = (observable, oldValue, newValue) -> GraphicController.refreshWindow(elements);

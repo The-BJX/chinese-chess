@@ -17,7 +17,7 @@ public class Game{
         return board;
     }
 
-    private static boolean positionInList(Position pos, List<Position> posList){
+    public static boolean positionInList(Position pos, List<Position> posList){
         for(Position p: posList){
             if(p.equals(pos)){
                 return true;
@@ -51,8 +51,7 @@ public class Game{
             }
             else{
                 //Try to move the piece to the new position
-                List<Position> legalMoves=new ArrayList<>();
-                legalMoves=selectedPiece.getLegalMoves(board,selectedPosition);
+                List<Position> legalMoves=selectedPiece.getLegalMoves(board,selectedPosition);
                 if(positionInList(position,legalMoves)){
                     //Move is legal
                     board.movePiece(selectedPosition,position);
