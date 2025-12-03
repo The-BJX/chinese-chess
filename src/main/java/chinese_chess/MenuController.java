@@ -1,5 +1,6 @@
 package chinese_chess;
 
+import Game.Game;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -9,15 +10,17 @@ public class MenuController {
     static void initGame(Stage stage, GraphicElements elements, TypeOfInit type){
         if(type==TypeOfInit.General){
             System.out.println("Starting New Game");
-            elements.GameMenu.getChildren().remove(elements.NewGame);
-            elements.GameMenu.getChildren().remove(elements.LoadFromSave);
-            elements.GameMenu.getChildren().add(elements.WhosTurn);
-            elements.WhosTurn.setText("黑方行棋");
+            elements.game=new Game();
+            elements.WhosTurn.setText("请红方先手");
+            //elements.GameMenu.getChildren().remove(elements.NewGame);
+            //elements.GameMenu.getChildren().remove(elements.LoadFromSave);
+            if(false==elements.GameMenu.getChildren().contains(elements.WhosTurn))
+                elements.GameMenu.getChildren().add(elements.WhosTurn);
             /*从头开始一个游戏*/
         }else if(type==TypeOfInit.FromSave){
             System.out.println("Starting From Save");
-            elements.GameMenu.getChildren().remove(elements.NewGame);
-            elements.GameMenu.getChildren().remove(elements.LoadFromSave);
+            //elements.GameMenu.getChildren().remove(elements.NewGame);
+            //elements.GameMenu.getChildren().remove(elements.LoadFromSave);
             //开个输入框，然后读取文件
             FileChooser filechooser= new FileChooser();
             filechooser.setTitle("选取存档");

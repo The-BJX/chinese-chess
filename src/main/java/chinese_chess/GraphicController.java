@@ -103,6 +103,8 @@ public class GraphicController {
 
         elements.WhosTurn = new Label("");
         elements.WhosTurn.setStyle("-fx-font-size: 16; -fx-text-fill: black;");
+        elements.GameMenu.getChildren().add(elements.WhosTurn);
+        elements.WhosTurn.setText("请红方先手");
         elements.gLabel.setWrapText(true);
 
 
