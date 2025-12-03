@@ -44,12 +44,15 @@ public class Game{
             //A piece is already selected
             Position selectedPosition=board.getSelectedPosition();
             Piece selectedPiece=board.getPieceAt(selectedPosition);
+
             if(selectedPosition.equals(position)){
                 //Deselect the piece
                 board.setSelectedPosition(null);
                 selectedPiece.isSelected=false;
-            }
-            else{
+            }else if(board.getPieceAt(position)!=null&&selectedPiece.side.equals(board.getPieceAt(position).side)){
+                board.setSelectedPosition(position);
+                selectedPiece.isSelected=false;
+            }else{
                 //Try to move the piece to the new position
                 List<Position> legalMoves=selectedPiece.getLegalMoves(board,selectedPosition);
                 if(positionInList(position,legalMoves)){

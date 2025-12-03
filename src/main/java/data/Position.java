@@ -23,5 +23,9 @@ public class Position {
     public boolean inBoardBounds(){
         return row>=0 && row<10 && col>=0 && col<9;
     }
-
+    @Override
+    public String toString(){
+        if(this==null)return new String("Nothing");
+        return String.format("(%d,%d)",this.row,this.col);
+    }
 }

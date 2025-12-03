@@ -73,6 +73,8 @@ public class RenderBoard {
         elements.Chuhe.setLayoutY(GridWidth/2-elements.Chuhe.getHeight()/2);
         elements.Hanjie.setLayoutX(2*GridWidth-elements.Hanjie.getWidth()/2);
         elements.Hanjie.setLayoutY(GridWidth/2-elements.Hanjie.getHeight()/2);
+        elements.Chuhe.setMouseTransparent(true);
+        elements.Hanjie.setMouseTransparent(true);
 
     }
 
@@ -106,6 +108,18 @@ public class RenderBoard {
                 if(side==Side.BLACK)tmplabel = new Label("兵");
                 else tmplabel = new Label("卒");
                 break;
+            case HORSE:
+                if(side==Side.BLACK)tmplabel = new Label("马");
+                else tmplabel = new Label("马");
+                break;
+            case ELEPHANT:
+                if(side==Side.BLACK)tmplabel = new Label("象");
+                else tmplabel = new Label("相");
+                break;
+            case CANNON:
+                if(side==Side.BLACK)tmplabel = new Label("炮");
+                else tmplabel = new Label("砲");
+                break;
             default:
                 tmplabel = new Label("");
         }
@@ -130,11 +144,40 @@ public class RenderBoard {
 
         tmp.setOnMouseClicked(event -> {
             elements.game.touchPosition(new Position(x,y));
+            System.out.printf("Touched piece (%d,%d)\n",x,y);
+            if(elements.game.getBoard().getSelectedPosition()!=null)
+                System.out.printf("What is now selected: %s\n", elements.game.getBoard().getSelectedPosition().toString());
+            GraphicController.refreshWindow(elements);
             event.consume();
         });
 
         elements.BoardSurface.getChildren().add(tmp);
         elements.BoardSurface.getChildren().add(tmplabel);
+
+    }
+    public static void drawMoveIndicator(GraphicElements elements, int x, int y, double GridWidth){
+        Circle tmp = new Circle();
+        tmp.setFill(Color.web("#EBF6FF"));
+        tmp.setOpacity(0.5);
+        tmp.setRadius(GridWidth*0.4);
+        tmp.setLayoutX((y+1)*GridWidth);
+        tmp.setLayoutY((x+1)*GridWidth);
+        tmp.setStrokeWidth(0);
+//        if(elements.game.getBoard().getSelectedPosition()!=null&&elements.game.getBoard().getSelectedPosition().equals(new Position(x,y))){
+//            tmp.setStrokeWidth(6);
+//        }else{
+//            tmp.setStrokeWidth(4);
+//        }
+
+        tmp.setOnMouseClicked(event -> {
+            elements.game.touchPosition(new Position(x,y));
+            elements.WhosTurn.setText(elements.game.getBoard().getCurrentTurn().toString());
+            System.out.printf("Indicator at (%d,%d) touched\n",x,y);
+            GraphicController.refreshWindow(elements);
+            event.consume();
+        });
+
+        elements.BoardSurface.getChildren().add(tmp);
 
     }
 }
