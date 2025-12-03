@@ -16,6 +16,7 @@ public class MenuController {
             //elements.GameMenu.getChildren().remove(elements.LoadFromSave);
             if(false==elements.GameMenu.getChildren().contains(elements.WhosTurn))
                 elements.GameMenu.getChildren().add(elements.WhosTurn);
+            GraphicController.refreshWindow(elements);
             /*从头开始一个游戏*/
         }else if(type==TypeOfInit.FromSave){
             System.out.println("Starting From Save");
