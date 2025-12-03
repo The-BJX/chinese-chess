@@ -34,6 +34,10 @@ public class GraphicController {
         elements.ChessBoard.setOnMouseClicked(mouseEvent -> {
             setSelection(new GridPoint(-1,-1));
             System.out.println("Selection canceled when clicking board");
+            if(elements.game.getBoard().getSelectedPosition()!=null){
+                elements.game.getBoard().getPieceAt(elements.game.getBoard().getSelectedPosition()).isSelected=false;
+                elements.game.getBoard().setSelectedPosition(null);
+            }
             refreshWindow(elements);
         });
 
@@ -112,7 +116,6 @@ public class GraphicController {
 
 
         elements.BoardSurface = new Pane();
-        elements.ChessBoard.getChildren().add(elements.BoardSurface);
 
         elements.GameRoot.getChildren().add(elements.ChessBoard);
         elements.GameRoot.getChildren().add(elements.PlayerRed);
@@ -129,7 +132,9 @@ public class GraphicController {
         elements.ChessBoard.getChildren().add(elements.PaneHanjie);
         elements.PaneChuhe.getChildren().add(elements.Chuhe);
         elements.PaneHanjie.getChildren().add(elements.Hanjie);
-
+        elements.ChessBoard.getChildren().add(elements.BoardSurface);
+        elements.PaneChuhe.setMouseTransparent(true);
+        elements.PaneHanjie.setMouseTransparent(true);
     }
 
     static void refreshWindow(GraphicElements elements){
@@ -178,6 +183,13 @@ public class GraphicController {
                 if(u!=null){
                     RenderBoard.drawPiece(elements,i,j,u.pieceType,GridWidth,u.side);
                 }
+            }
+        }
+
+        //画指示器
+        if(elements.game.getBoard().getSelectedPosition()!=null){
+            for (var u : elements.game.getBoard().getPieceAt(elements.game.getBoard().getSelectedPosition()).getLegalMoves(elements.game.getBoard(),elements.game.getBoard().getSelectedPosition())){
+                RenderBoard.drawMoveIndicator(elements,u.getRow(),u.getCol(),GridWidth);
             }
         }
     }
