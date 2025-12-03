@@ -2,6 +2,7 @@ package Game;
 //This file is now for test only
 
 import Core.Board;
+import data.GameStatus;
 import pieces.Piece;
 import data.Position;
 
@@ -16,6 +17,17 @@ public class Game{
     public Board getBoard(){
         return board;
     }
+    private GameStatus gameStatus;
+    public void setGameStatus(GameStatus u){
+        gameStatus=u;
+    }
+    public GameStatus getGameStatus(){
+        return gameStatus;
+    }
+    public Game(){
+        gameStatus=GameStatus.ONGOING;
+    }
+
 
     public static boolean positionInList(Position pos, List<Position> posList){
         for(Position p: posList){
@@ -68,12 +80,14 @@ public class Game{
                     int status= board.judgeGameOver();
                     if(status==1){
                         System.out.println("Red wins!");
+                        setGameStatus(GameStatus.RED_WIN);
                     }
                     else if(status==2){
                         System.out.println("Black wins!");
+                        setGameStatus(GameStatus.BLACK_WIN);
                     }
                     else if(status==0){
-                        System.out.println("Draw!");
+                        System.out.println("Draw!");//这里应该仔细判断到底是哪边困毙了
                     }
 
                 }
