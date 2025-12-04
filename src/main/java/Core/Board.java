@@ -178,7 +178,7 @@ public class Board {
     }
 
     public int judgeGameOver(){
-        if(getThreatenedPositions(currentTurn)!=null){
+        if(getThreatenedPositions(currentTurn)==null){
             if(isGeneralInCheck(currentTurn)){
                 //Current player is checkmated
                 return currentTurn== Side.RED? 2:1; //1 for Red wins, 2 for Black wins
