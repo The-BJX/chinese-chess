@@ -205,14 +205,6 @@ public class Board {
         setPieceAt(toPosition, piece);
         setPieceAt(fromPosition, null);
 
-
-        /*
-        //TODO output data log should be added here
-        MoveRecord record=new MoveRecord(fromPosition, toPosition);
-        moveHistory.add(record);
-        saveBoard("chinese_chess_save.dat");
-
-         */
     }
 
     public int judgeGameOver(){
