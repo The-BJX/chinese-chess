@@ -156,11 +156,19 @@ public class RenderBoard {
         if(side==Side.BLACK)tmplabel.setTextFill(Color.BLACK);
 
         tmp.setOnMouseClicked(event -> {
-            elements.game.touchPosition(new Position(x,y));
+            try {
+                elements.game.touchPosition(new Position(x,y));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
             System.out.printf("Touched piece (%d,%d)\n",x,y);
             if(elements.game.getBoard().getSelectedPosition()!=null)
                 System.out.printf("What is now selected: %s\n", elements.game.getBoard().getSelectedPosition().toString());
-            GraphicController.refreshWindow(elements);
+            try {
+                GraphicController.refreshWindow(elements);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
             event.consume();
         });
 
@@ -185,7 +193,11 @@ public class RenderBoard {
         tmp.setOnMouseClicked(event -> {
             if(elements.game.getGameStatus()!=GameStatus.ONGOING)
                 return;
-            elements.game.touchPosition(new Position(x,y));
+            try {
+                elements.game.touchPosition(new Position(x,y));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
             System.out.printf("Indicator at (%d,%d) touched\n",x,y);
             if(elements.game.getGameStatus()==GameStatus.ONGOING){
                 if(elements.game.getBoard().getCurrentTurn().equals(Side.BLACK)){
@@ -200,7 +212,11 @@ public class RenderBoard {
             }else if(/*在此讨论Stalemate的情况*/false){
 
             }
-            GraphicController.refreshWindow(elements);
+            try {
+                GraphicController.refreshWindow(elements);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
             event.consume();
         });
     }

@@ -1,6 +1,8 @@
 package data;
 
-public class Position {
+import java.io.Serializable;
+
+public class Position implements Serializable {
     public int row;
     public int col;
 
@@ -23,6 +25,7 @@ public class Position {
     public boolean inBoardBounds(){
         return row>=0 && row<10 && col>=0 && col<9;
     }
+
     @Override
     public String toString(){
         if(this==null)return new String("Nothing");

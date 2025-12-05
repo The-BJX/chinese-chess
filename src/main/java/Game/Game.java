@@ -2,6 +2,7 @@ package Game;
 //This file is now for test only
 
 import Core.Board;
+import GameSave.MoveRecord;
 import data.GameStatus;
 import pieces.Piece;
 import data.Position;
@@ -38,7 +39,7 @@ public class Game{
         return false;
     }
 
-    public void touchPosition(Position position){
+    public void touchPosition(Position position) throws Exception {
         if(board.getSelectedPosition()==null){
             //No piece is selected yet
             Piece tempPiece=board.getPieceAt(position);
@@ -61,10 +62,12 @@ public class Game{
                 //Deselect the piece
                 board.setSelectedPosition(null);
                 selectedPiece.isSelected=false;
-            }else if(board.getPieceAt(position)!=null&&selectedPiece.side.equals(board.getPieceAt(position).side)){
+            }
+            else if(board.getPieceAt(position)!=null&&selectedPiece.side.equals(board.getPieceAt(position).side)){
                 board.setSelectedPosition(position);
                 selectedPiece.isSelected=false;
-            }else{
+            }
+            else{
                 //Try to move the piece to the new position
                 List<Position> legalMoves=selectedPiece.getLegalMoves(board,selectedPosition);
                 if(positionInList(position,legalMoves)){
@@ -73,9 +76,16 @@ public class Game{
                     //Deselect the piece after moving
                     board.setSelectedPosition(null);
                     selectedPiece.isSelected=false;
+
+                    MoveRecord record=new MoveRecord(selectedPosition, position);
+                    board.moveHistory.add(record);
+                    board.saveBoard("chinese_chess_save.dat");
+
                     //Switch turn
                     board.switchTurn();
                     System.out.println("Move successful!");
+
+
 
                     int status= board.judgeGameOver();
                     if(status==1){
@@ -86,8 +96,11 @@ public class Game{
                         System.out.println("Black wins!");
                         setGameStatus(GameStatus.BLACK_WIN);
                     }
-                    else if(status==0){
-                        System.out.println("Draw!");//这里应该仔细判断到底是哪边困毙了
+                    else if(status==3){
+                        System.out.println("Red stalemate, Black Wins");//这里应该仔细判断到底是哪边困毙了
+                    }
+                    else if(status==4) {
+                        System.out.println("Black stalemate, Red Wins");
                     }
 
                 }
