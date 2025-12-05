@@ -148,15 +148,22 @@ public class GraphicController {
 
             if(((Y+1)*GridWidth-y)*((Y+1)*GridWidth-y)+
                ((X+1)*GridWidth-x)*((X+1)*GridWidth-x)<=
-                    (0.4*GridWidth)*(0.4*GridWidth)){
+                    (0.5*GridWidth)*(0.5*GridWidth)){
                 elements.game.getBoard().setHoverPosition((new Position(X,Y)));
                 if(HoverChangedFlag){
                     refreshWindow(elements);
-                    System.out.printf("Hovering (%d, %d)\n",X,Y);
+                    //System.out.printf("Hovering (%d, %d)\n",X,Y);
                     HoverChangedFlag=false;
                 }
             }
-                else elements.game.getBoard().deHover();
+            else{
+                elements.game.getBoard().deHover();
+                if(HoverChangedFlag){
+                    refreshWindow(elements);
+                    //System.out.println("Dehovered");
+                    HoverChangedFlag=false;
+                }
+            }
 
         });
     }

@@ -92,6 +92,7 @@ public class RenderBoard {
         if(elements.game.getBoard().getHoverPosition()!=null&&elements.game.getBoard().getHoverPosition().equals(new Position(x,y))){
             tmp.setLayoutX((y+1.1)*GridWidth);
             tmp.setLayoutY((x+0.9)*GridWidth);
+            drawShadow(elements,x,y,GridWidth);
         }else{
             tmp.setLayoutX((y+1)*GridWidth);
             tmp.setLayoutY((x+1)*GridWidth);
@@ -170,15 +171,19 @@ public class RenderBoard {
     }
     public static void drawMoveIndicator(GraphicElements elements, int x, int y, double GridWidth){
         Circle tmp = new Circle();
-        tmp.setFill(Color.web("#EBF6FF"));
+        //tmp.setFill(Color.web("#EBF6FF"));
+        tmp.setFill(Color.web("#A6B2D7"));
         tmp.setOpacity(0.5);
-        tmp.setLayoutX((y+1)*GridWidth);
-        tmp.setLayoutY((x+1)*GridWidth);
+        tmp.setRadius(0.4*GridWidth);
         tmp.setStrokeWidth(0);
         if(elements.game.getBoard().getHoverPosition()!=null&&elements.game.getBoard().getHoverPosition().equals(new Position(x,y))){
-            tmp.setRadius(GridWidth*0.5);
+            tmp.setLayoutX((y+1.1)*GridWidth);
+            tmp.setLayoutY((x+0.9)*GridWidth);
+            drawLighterShadow(elements,x,y,GridWidth,true);
         }else{
-            tmp.setRadius(GridWidth*0.4);
+            tmp.setLayoutX((y+1)*GridWidth);
+            tmp.setLayoutY((x+1)*GridWidth);
+            drawLighterShadow(elements,x,y,GridWidth,false);
         }
         elements.BoardSurface.getChildren().add(tmp);
 
@@ -203,5 +208,32 @@ public class RenderBoard {
             GraphicController.refreshWindow(elements);
             event.consume();
         });
+    }
+    public static void drawShadow(GraphicElements elements, int x, int y, double GridWidth){
+        Circle tmp = new Circle();
+        tmp.setFill(Color.web("#000000"));
+        tmp.setOpacity(0.4);
+        tmp.setLayoutX((y+1)*GridWidth);
+        tmp.setLayoutY((x+1)*GridWidth);
+        tmp.setStrokeWidth(0);
+        tmp.setRadius(GridWidth*0.4+1);
+        elements.BoardSurface.getChildren().add(tmp);
+    }
+    public static void drawLighterShadow(GraphicElements elements, int x, int y, double GridWidth, boolean lifted){
+        if(elements.game.getBoard().getPieceAt(new Position(x,y))!=null){
+            return;
+        }
+
+        Circle tmp = new Circle();
+        tmp.setFill(Color.web("#ffffff"));
+        tmp.setOpacity(0.4);
+        tmp.setLayoutX((y+1)*GridWidth);
+        tmp.setLayoutY((x+1)*GridWidth);
+        tmp.setStrokeWidth(0);
+        tmp.setRadius(GridWidth*0.4);
+        if(lifted){
+            tmp.setRadius(GridWidth*0.36);
+        }
+        elements.BoardSurface.getChildren().add(tmp);
     }
 }
