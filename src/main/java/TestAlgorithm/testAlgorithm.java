@@ -24,6 +24,16 @@ public class testAlgorithm {
             String input=sc.nextLine();
             String[] parts=input.split(" ");
             if(parts.length!=2){
+                if(input.equals("regret")){
+                    game.getBoard().regretLastMove();
+                    game.printBoard();
+                    System.out.printf("Now it is %s's turn",game.getBoard().getCurrentTurn());
+                    if(game.getBoard().isGeneralInCheck(game.getBoard().getCurrentTurn())){
+                        System.out.println(" -- Check!");
+                    }
+                    System.out.println();
+                    continue;
+                }
                 System.out.println("Invalid input. Please enter row and column separated by a space.");
                 continue;
             }
