@@ -167,7 +167,11 @@ public class GraphicController {
                     (0.5*GridWidth)*(0.5*GridWidth)){
                 elements.game.getBoard().setHoverPosition((new Position(X,Y)));
                 if(HoverChangedFlag){
-                    refreshWindow(elements);
+                    try {
+                        refreshWindow(elements);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                     //System.out.printf("Hovering (%d, %d)\n",X,Y);
                     HoverChangedFlag=false;
                 }
