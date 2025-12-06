@@ -1,5 +1,8 @@
 package Core;
 
+import GameSave.MoveRecord;
+import GameSave.ChineseChessDataSaver;
+
 import chinese_chess.GraphicController;
 import data.InitialPositions;
 import data.Side;
@@ -8,6 +11,7 @@ import pieces.GeneralPiece;
 import pieces.Piece;
 
 import java.util.List;
+
 
 public class Board {
     public static final int ROWS =10;
@@ -28,6 +32,10 @@ public class Board {
     private Side currentTurn= Side.RED;
     // Track the currently selected position on this board (if any)
     private Position selectedPosition = null;
+
+
+    public List<MoveRecord> moveHistory = new java.util.ArrayList<>();
+    ChineseChessDataSaver dataSaver=new ChineseChessDataSaver();
 
     public Board(){
         initializeBoard();
@@ -99,6 +107,30 @@ public class Board {
 
     }
 
+    public void loadBoardFromFile(String chinese_chess_save_dat) throws Exception {
+        moveHistory=dataSaver.loadGameData(chinese_chess_save_dat);
+        //Reinitialize the board
+        for(int r=0; r<ROWS; r++){
+            for(int c=0; c<COLS; c++){
+                grid[r][c]=null;
+            }
+        }
+        initializeBoard();
+        //Replay the moves
+        try{
+            for(MoveRecord record: moveHistory){
+                movePiece(record.fromPosition, record.toPosition);
+                switchTurn();
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void saveBoard(String filepath) throws Exception{
+        dataSaver.saveGameData(moveHistory,filepath);
+    }
+
     public Piece getPieceAt(Position position) {
         int r=position.getRow();
         int c=position.getCol();
@@ -162,7 +194,7 @@ public class Board {
         return false;
     }
 
-    public void movePiece(Position fromPosition, Position toPosition) {
+    public void movePiece(Position fromPosition, Position toPosition) throws Exception {
         int fromRow=fromPosition.getRow();
         int fromCol=fromPosition.getCol();
         if (grid[fromRow][fromCol]==null){
@@ -173,8 +205,6 @@ public class Board {
         setPieceAt(toPosition, piece);
         setPieceAt(fromPosition, null);
 
-
-        //TODO output data log should be added here
     }
 
     public int judgeGameOver(){

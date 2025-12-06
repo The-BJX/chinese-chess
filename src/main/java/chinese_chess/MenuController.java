@@ -7,7 +7,7 @@ import javafx.stage.Stage;
 import java.io.File;
 
 public class MenuController {
-    static void initGame(Stage stage, GraphicElements elements, TypeOfInit type){
+    static void initGame(Stage stage, GraphicElements elements, TypeOfInit type) throws Exception {
         if(type==TypeOfInit.General){
             System.out.println("Starting New Game");
             elements.game=new Game();

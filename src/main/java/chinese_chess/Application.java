@@ -11,18 +11,36 @@ public class Application extends javafx.application.Application {
     GraphicElements elements = new GraphicElements();
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws Exception {
 
         elements.game=new Game();
         GraphicController.initGraphics(primaryStage,elements);
 
-        ChangeListener<Number> sizeListener = (observable, oldValue, newValue) -> GraphicController.refreshWindow(elements);
+        ChangeListener<Number> sizeListener = (observable, oldValue, newValue) -> {
+            try {
+                GraphicController.refreshWindow(elements);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        };
 
         elements.WindowRoot.widthProperty().addListener(sizeListener);
         elements.WindowRoot.heightProperty().addListener(sizeListener);
 
-        primaryStage.fullScreenProperty().addListener((obs,oldValue,newValue)-> windowReactToChange());
-        primaryStage.maximizedProperty().addListener((obs,oldValue,newValue)-> windowReactToChange());
+        primaryStage.fullScreenProperty().addListener((obs,oldValue,newValue)-> {
+            try {
+                windowReactToChange();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+        primaryStage.maximizedProperty().addListener((obs,oldValue,newValue)-> {
+            try {
+                windowReactToChange();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
 
 
 
@@ -36,27 +54,67 @@ public class Application extends javafx.application.Application {
         GraphicController.refreshWindow(elements);
         GraphicController.refreshWindow(elements);
         Platform.runLater(()->{
-            GraphicController.refreshWindow(elements);
-            GraphicController.refreshWindow(elements);
+            try {
+                GraphicController.refreshWindow(elements);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                GraphicController.refreshWindow(elements);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
 
         });
     }
-    void windowReactToChange(){
+    void windowReactToChange() throws Exception {
         //真是一坨屎，但是我有什么办法
         GraphicController.refreshWindow(elements);
         GraphicController.refreshWindow(elements);
         Platform.runLater(()->{
-            GraphicController.refreshWindow(elements);
-            GraphicController.refreshWindow(elements);
+            try {
+                GraphicController.refreshWindow(elements);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                GraphicController.refreshWindow(elements);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
             Platform.runLater(()->{
-                GraphicController.refreshWindow(elements);
-                GraphicController.refreshWindow(elements);
+                try {
+                    GraphicController.refreshWindow(elements);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+                try {
+                    GraphicController.refreshWindow(elements);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
                 Platform.runLater(()->{
-                    GraphicController.refreshWindow(elements);
-                    GraphicController.refreshWindow(elements);
+                    try {
+                        GraphicController.refreshWindow(elements);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                    try {
+                        GraphicController.refreshWindow(elements);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                     Platform.runLater(()->{
-                        GraphicController.refreshWindow(elements);
-                        GraphicController.refreshWindow(elements);
+                        try {
+                            GraphicController.refreshWindow(elements);
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+                        try {
+                            GraphicController.refreshWindow(elements);
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
                     });
                 });
             });

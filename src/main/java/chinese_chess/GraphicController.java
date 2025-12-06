@@ -40,7 +40,11 @@ public class GraphicController {
                 elements.game.getBoard().getPieceAt(elements.game.getBoard().getSelectedPosition()).isSelected=false;
                 elements.game.getBoard().setSelectedPosition(null);
             }
-            refreshWindow(elements);
+            try {
+                refreshWindow(elements);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         });
 
         Label label = new Label("chessboard");
@@ -112,10 +116,22 @@ public class GraphicController {
 
         elements.GameMenu.setSpacing(MENU_PADDING);
         elements.NewGame = new Button("新游戏");
-        elements.NewGame.setOnAction(event -> MenuController.initGame(stage,elements,TypeOfInit.General));
+        elements.NewGame.setOnAction(event -> {
+            try {
+                MenuController.initGame(stage,elements,TypeOfInit.General);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
         elements.GameMenu.getChildren().add(elements.NewGame);
         elements.LoadFromSave = new Button("加载残局");
-        elements.LoadFromSave.setOnAction(event -> MenuController.initGame(stage,elements,TypeOfInit.FromSave));
+        elements.LoadFromSave.setOnAction(event -> {
+            try {
+                MenuController.initGame(stage,elements,TypeOfInit.FromSave);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
         elements.GameMenu.getChildren().add(elements.LoadFromSave);
 
 
@@ -159,8 +175,13 @@ public class GraphicController {
             else{
                 elements.game.getBoard().deHover();
                 if(HoverChangedFlag){
-                    refreshWindow(elements);
                     //System.out.println("Dehovered");
+                    try {
+                        refreshWindow(elements);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                    System.out.printf("Hovering (%d, %d)\n",X,Y);
                     HoverChangedFlag=false;
                 }
             }
@@ -168,7 +189,7 @@ public class GraphicController {
         });
     }
 
-    static void refreshWindow(GraphicElements elements){
+    static void refreshWindow(GraphicElements elements) throws Exception {
         double BoardWidth;
         double BoardHeight;
         elements.GameRoot.setPrefSize(elements.WindowRoot.getWidth(),elements.WindowRoot.getHeight());

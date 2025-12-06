@@ -57,7 +57,7 @@ public class GeneralPiece extends Piece{
             }
         }
 
-
+        /*
         final Position redPalaceCenter=new Position(8,4);
         final Position blackPalaceCenter=new Position(1,4);
 
@@ -103,6 +103,8 @@ public class GeneralPiece extends Piece{
                 }
             }
         }
+
+        */
 
 
         //The situation where the two generals face each other directly without any pieces in between
