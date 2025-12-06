@@ -53,6 +53,19 @@ public class Board {
     }
 
     private void initializeBoard(){
+        //make sure curren turn is red
+        this.currentTurn=Side.RED;
+
+        //make sure no position selected
+        selectedPosition = null;
+
+        //make sure all the positions are empty
+        for(int r=0; r<ROWS; r++){
+            for(int c=0; c<COLS; c++){
+                grid[r][c]=null;
+            }
+        }
+
         // Place generals at their initial positions
         setPieceAt(InitialPositions.blackGeneral, new GeneralPiece(Side.BLACK));
         setPieceAt(InitialPositions.redGeneral, new GeneralPiece(Side.RED));
@@ -119,7 +132,7 @@ public class Board {
         //Replay the moves
         try{
             for(MoveRecord record: moveHistory){
-                movePiece(record.fromPosition, record.toPosition);
+                movePiece(record.fromPosition, record.toPosition,false);
                 switchTurn();
             }
         }catch(Exception e){
@@ -194,7 +207,7 @@ public class Board {
         return false;
     }
 
-    public void movePiece(Position fromPosition, Position toPosition) throws Exception {
+    public void movePiece(Position fromPosition, Position toPosition, boolean formal) throws Exception {
         int fromRow=fromPosition.getRow();
         int fromCol=fromPosition.getCol();
         if (grid[fromRow][fromCol]==null){
@@ -205,6 +218,42 @@ public class Board {
         setPieceAt(toPosition, piece);
         setPieceAt(fromPosition, null);
 
+        if(formal){
+            MoveRecord record=new MoveRecord(fromPosition, toPosition);
+            this.moveHistory.add(record);
+            this.saveBoard("chinese_chess_save.dat");
+        }
+
+    }
+
+    public void regretLastMove() throws Exception {
+        if(moveHistory.size()==0){
+            System.out.println("No moves to regret!");
+            return;
+        }
+        //MoveRecord lastMove=moveHistory.get(moveHistory.size()-1);
+
+        moveHistory.remove(moveHistory.size()-1);
+        this.saveBoard("chinese_chess_save.dat");
+        //Move the piece back
+        //movePiece(lastMove.toPosition, lastMove.fromPosition,false);
+        //Switch turn back
+        //switchTurn();
+        //Save the board
+
+        initializeBoard();
+        //Replay the moves
+        try{
+            for(MoveRecord record: moveHistory){
+                movePiece(record.fromPosition, record.toPosition,false);
+                switchTurn();
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+
+        saveBoard("chinese_chess_save.dat");
     }
 
     public int judgeGameOver(){

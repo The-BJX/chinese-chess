@@ -48,7 +48,7 @@ public abstract class Piece {
             Piece capturedPiece = simBoard.getPieceAt(toPos);
 
             // Apply move
-            simBoard.movePiece(currentPosition,toPos);
+            simBoard.movePiece(currentPosition,toPos,false);
             //board.setPieceAt(toPos, movingPiece);
             //board.setPieceAt(currentPosition, null);
 

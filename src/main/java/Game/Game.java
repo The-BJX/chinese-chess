@@ -72,14 +72,17 @@ public class Game{
                 List<Position> legalMoves=selectedPiece.getLegalMoves(board,selectedPosition);
                 if(positionInList(position,legalMoves)){
                     //Move is legal
-                    board.movePiece(selectedPosition,position);
+                    board.movePiece(selectedPosition,position,true);
                     //Deselect the piece after moving
                     board.setSelectedPosition(null);
                     selectedPiece.isSelected=false;
 
+                    /*
                     MoveRecord record=new MoveRecord(selectedPosition, position);
                     board.moveHistory.add(record);
                     board.saveBoard("chinese_chess_save.dat");
+
+                     */
 
                     //Switch turn
                     board.switchTurn();
