@@ -132,8 +132,16 @@ public class GraphicController {
                 throw new RuntimeException(e);
             }
         });
+        elements.SaveGame = new Button("保存残局");
+        elements.SaveGame.setOnAction(event -> {
+            try {
+                MenuController.saveGame(elements,stage);
+            }catch(Exception e){
+                throw new RuntimeException(e);
+            }
+        });
         elements.GameMenu.getChildren().add(elements.LoadFromSave);
-
+        elements.GameMenu.getChildren().add(elements.SaveGame);
 
         elements.BoardSurface = new Pane();
 

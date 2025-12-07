@@ -23,7 +23,7 @@ public class GraphicElements {
 
     Pane BoardSurface;//真正行棋的地方，刷新棋盘的时候clear(), 然后把棋子一个个加回来
 
-    Button NewGame, LoadFromSave;
+    Button NewGame, LoadFromSave, SaveGame;
 
     Label WhosTurn;
 

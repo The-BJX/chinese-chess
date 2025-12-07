@@ -1,6 +1,7 @@
 package chinese_chess;
 
 import Game.Game;
+import GameSave.ChineseChessDataSaver;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -27,6 +28,15 @@ public class MenuController {
             filechooser.setTitle("选取存档");
             File file = filechooser.showOpenDialog(stage);
             System.out.println(file);
+            elements.game.getBoard().loadBoardFromFile(file.getPath());
+            GraphicController.refreshWindow(elements);
         }
+    }
+    static void saveGame(GraphicElements elements, Stage stage)throws Exception{
+        System.out.println("Saving current");
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("保存残局");
+        File file = fileChooser.showSaveDialog(stage);
+        elements.game.getBoard().saveBoard(file.getPath());
     }
 }
