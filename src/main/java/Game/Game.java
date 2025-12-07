@@ -77,12 +77,6 @@ public class Game{
                     board.setSelectedPosition(null);
                     selectedPiece.isSelected=false;
 
-                    /*
-                    MoveRecord record=new MoveRecord(selectedPosition, position);
-                    board.moveHistory.add(record);
-                    board.saveBoard("chinese_chess_save.dat");
-
-                     */
 
                     //Switch turn
                     board.switchTurn();

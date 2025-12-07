@@ -1,5 +1,6 @@
 package Core;
 
+import GameSave.AutoSaver;
 import GameSave.MoveRecord;
 import GameSave.ChineseChessDataSaver;
 
@@ -36,6 +37,7 @@ public class Board {
 
     public List<MoveRecord> moveHistory = new java.util.ArrayList<>();
     ChineseChessDataSaver dataSaver=new ChineseChessDataSaver();
+    AutoSaver autoDataSaver=new AutoSaver();
 
     public Board(){
         initializeBoard();
@@ -144,6 +146,10 @@ public class Board {
         dataSaver.saveGameData(moveHistory,filepath);
     }
 
+    public void autoSaveBoard() throws Exception{
+        autoDataSaver.autoSaveGameData(moveHistory);
+    }
+
     public Piece getPieceAt(Position position) {
         int r=position.getRow();
         int c=position.getCol();
@@ -222,6 +228,7 @@ public class Board {
             MoveRecord record=new MoveRecord(fromPosition, toPosition);
             this.moveHistory.add(record);
             this.saveBoard("chinese_chess_save.dat");
+            this.autoSaveBoard();
         }
 
     }
@@ -234,7 +241,6 @@ public class Board {
         //MoveRecord lastMove=moveHistory.get(moveHistory.size()-1);
 
         moveHistory.remove(moveHistory.size()-1);
-        this.saveBoard("chinese_chess_save.dat");
         //Move the piece back
         //movePiece(lastMove.toPosition, lastMove.fromPosition,false);
         //Switch turn back
@@ -253,7 +259,8 @@ public class Board {
             e.printStackTrace();
         }
 
-        saveBoard("chinese_chess_save.dat");
+        this.saveBoard("chinese_chess_save.dat");
+        this.autoSaveBoard();
     }
 
     public int judgeGameOver(){
