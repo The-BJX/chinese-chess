@@ -5,6 +5,8 @@ import data.Side;
 import data.PieceType;
 import data.Position;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class AdvisorPiece extends Piece{
@@ -28,22 +30,36 @@ public class AdvisorPiece extends Piece{
     public static final Position BLACK_ADVISOR_CENTER = new Position(1,4);
 
     public List<Position> getUnfilteredLegalMoves(Board board, Position currentPosition) {
+        List<Position> legalMoves = new ArrayList<>();
         if(this.side== Side.RED){
             if(currentPosition.equals(RED_ADVISOR_CENTER)){
-                return java.util.Arrays.asList(RED_ADVISOR_EDGES);
+                for(Position pos: RED_ADVISOR_EDGES){
+                    if(board.getPieceAt(pos)==null || board.getPieceAt(pos).side!=this.side){
+                        legalMoves.add(pos);
+                    }
+                }
             }
             else{
-                return java.util.Arrays.asList(RED_ADVISOR_CENTER);
+                if(board.getPieceAt(RED_ADVISOR_CENTER)==null || board.getPieceAt(RED_ADVISOR_CENTER).side!=this.side){
+                    legalMoves.add(RED_ADVISOR_CENTER);
+                }
             }
         }
         else{
             if(currentPosition.equals(BLACK_ADVISOR_CENTER)){
-                return java.util.Arrays.asList(BLACK_ADVISOR_EDGES);
+                for(Position pos: BLACK_ADVISOR_EDGES){
+                    if(board.getPieceAt(pos)==null || board.getPieceAt(pos).side!=this.side){
+                        legalMoves.add(pos);
+                    }
+                }
             }
             else{
-                return java.util.Arrays.asList(BLACK_ADVISOR_CENTER);
+                if(board.getPieceAt(BLACK_ADVISOR_CENTER)==null || board.getPieceAt(BLACK_ADVISOR_CENTER).side!=this.side){
+                    legalMoves.add(BLACK_ADVISOR_CENTER);
+                }
             }
         }
+        return legalMoves;
     }
 
 }

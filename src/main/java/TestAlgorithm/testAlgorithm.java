@@ -1,6 +1,7 @@
 package TestAlgorithm;
 //this file is now for test only
 import Game.Game;
+import data.Side;
 import pieces.Piece;
 import data.Position;
 import java.util.List;
@@ -75,6 +76,26 @@ public class testAlgorithm {
                     System.out.printf("Now it is %s's turn",game.getBoard().getCurrentTurn());
                     if(game.getBoard().isGeneralInCheck(game.getBoard().getCurrentTurn())){
                         System.out.println(" -- Check!");
+                    }
+                    System.out.println();
+                    continue;
+                }
+
+
+                if(input.equals("currentsidealllegalmoves")){
+                    Side currentSide=game.getBoard().getCurrentTurn();
+                    System.out.printf("All legal moves for %s:%n",currentSide);
+                    for(int r=0;r<10;r++){
+                        for(int c=0;c<9;c++){
+                            Position pos=new Position(r,c);
+                            Piece piece=game.getBoard().getPieceAt(pos);
+                            if(piece!=null && piece.side.equals(currentSide)){
+                                List<Position> legalMoves= piece.getLegalMoves(game.getBoard(), pos);
+                                for(Position movePos: legalMoves){
+                                    System.out.printf("Piece at (%d,%d) can move to (%d,%d)%n",r,c,movePos.row,movePos.col);
+                                }
+                            }
+                        }
                     }
                     System.out.println();
                     continue;

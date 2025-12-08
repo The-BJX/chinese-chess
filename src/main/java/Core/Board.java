@@ -222,6 +222,9 @@ public class Board {
                 }
             }
         }
+        if(allLegalMoves.size()==0){
+            return null;
+        }
         return allLegalMoves;
     }
 
