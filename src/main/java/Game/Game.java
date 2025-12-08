@@ -40,6 +40,11 @@ public class Game{
     }
 
     public void touchPosition(Position position) throws Exception {
+        if(board.isViewing()){
+            System.out.println("Currently viewing past moves. Cannot make a move.");
+            return;
+        }
+
         if(board.getSelectedPosition()==null){
             //No piece is selected yet
             Piece tempPiece=board.getPieceAt(position);

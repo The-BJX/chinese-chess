@@ -39,6 +39,9 @@ public class Board {
     ChineseChessDataSaver dataSaver=new ChineseChessDataSaver();
     AutoSaver autoDataSaver=new AutoSaver();
 
+    public int currentViewingStep=0;
+
+
     public Board(){
         initializeBoard();
     }
@@ -227,8 +230,9 @@ public class Board {
         if(formal){
             MoveRecord record=new MoveRecord(fromPosition, toPosition);
             this.moveHistory.add(record);
-            this.saveBoard("chinese_chess_save.dat");
+            //this.saveBoard("chinese_chess_save.dat");
             this.autoSaveBoard();
+            currentViewingStep=moveHistory.size();
         }
 
     }
@@ -259,8 +263,81 @@ public class Board {
             e.printStackTrace();
         }
 
-        this.saveBoard("chinese_chess_save.dat");
+        currentViewingStep=moveHistory.size();
+
+        //this.saveBoard("chinese_chess_save.dat");
         this.autoSaveBoard();
+    }
+
+    public void viewPreviousMove(){
+        if(currentViewingStep==0){
+            System.out.println("Already at the beginning of the game!");
+            return;
+        }
+        currentViewingStep--;
+
+        initializeBoard();
+        //Replay the moves
+        try{
+            for(int i=0;i<currentViewingStep;i++){
+                MoveRecord record=moveHistory.get(i);
+                movePiece(record.fromPosition, record.toPosition,false);
+                switchTurn();
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+
+
+    }
+
+    public void viewNextMove(){
+        if(currentViewingStep==moveHistory.size()){
+            System.out.println("Already at the latest move!");
+            return;
+        }
+        currentViewingStep++;
+
+        initializeBoard();
+        //Replay the moves
+        try{
+            for(int i=0;i<currentViewingStep;i++){
+                MoveRecord record=moveHistory.get(i);
+                movePiece(record.fromPosition, record.toPosition,false);
+                switchTurn();
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public void returnToLatestMove(){
+        if(currentViewingStep==moveHistory.size()){
+            System.out.println("Already at the latest move!");
+            return;
+        }
+        currentViewingStep=moveHistory.size();
+
+        initializeBoard();
+        //Replay the moves
+        try{
+            for(int i=0;i<currentViewingStep;i++){
+                MoveRecord record=moveHistory.get(i);
+                movePiece(record.fromPosition, record.toPosition,false);
+                switchTurn();
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public boolean isViewing(){
+        return currentViewingStep!=moveHistory.size();
     }
 
     public int judgeGameOver(){
