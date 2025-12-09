@@ -120,9 +120,13 @@ public class GameDialogue {
                 //正确则执行
             }else if(typeOfDialogue.equals("RegisterUsername")){
                 elements.usernameCache=InputField.getText();
-                killDialogue(elements);
-                startInputDialogue(elements,"注册","请输入密码","password",stage,"RegisterPassword",null);
-
+                if(elements.userDataKeeper.containName(elements.usernameCache)){
+                    System.out.println("早已注册");
+                    QuestionLabel.setText("错误：账号已注册");
+                }else {
+                    killDialogue(elements);
+                    startInputDialogue(elements, "注册", "请输入密码", "password", stage, "RegisterPassword", null);
+                }
             }else if(typeOfDialogue.equals("RegisterPassword")){
                 elements.passwordCache=InputField.getText();
                 //检验是否密码正确：
@@ -136,17 +140,15 @@ public class GameDialogue {
                 }catch (NoSuchAlgorithmException e){e.printStackTrace();}
                 //安全的不行，亲妈都认不出来
                 //然后进行文件比对
-                if(elements.userDataKeeper.containMd5(hash)){
-                    System.out.println("早已注册");
-                    QuestionLabel.setText("错误：账号已注册");
-                }else{
-                    elements.userDataKeeper.addMd5(hash);
-                    System.out.println("注册成功");
-                    killDialogue(elements);
 
-                }
-            }
-            try{GraphicController.refreshWindow(elements);}catch(Exception e){};
+                elements.userDataKeeper.addMd5(elements.usernameCache,hash);
+                System.out.println("注册成功");
+                killDialogue(elements);
+
+
+            };
+
+            try{GraphicController.refreshWindow(elements);}catch(Exception e){}
 
         });
 
