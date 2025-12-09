@@ -5,6 +5,7 @@ import GameSave.MoveRecord;
 import GameSave.ChineseChessDataSaver;
 
 import chinese_chess.GraphicController;
+import data.GameStatus;
 import data.InitialPositions;
 import data.Side;
 import data.Position;
@@ -372,7 +373,7 @@ public class Board {
             }
             else{
                 //Stalemate
-                return 0; //0 for draw
+                return currentTurn== Side.RED? 2:1;
             }
         }
         return -1; //-1 for game not over
