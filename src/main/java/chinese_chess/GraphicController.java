@@ -193,7 +193,7 @@ public class GraphicController {
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
-                    System.out.printf("Hovering (%d, %d)\n",X,Y);
+                    //System.out.printf("Hovering (%d, %d)\n",X,Y);
                     HoverChangedFlag=false;
                 }
             }
