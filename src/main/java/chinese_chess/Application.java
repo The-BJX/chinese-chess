@@ -47,7 +47,7 @@ public class Application extends javafx.application.Application {
         Scene scene = new Scene(elements.WindowRoot, 800, 600);
 
         primaryStage.setScene(scene);
-        primaryStage.setTitle("Chess");
+        primaryStage.setTitle("中国象棋 Chinese-Chess");
 
 
         primaryStage.show();

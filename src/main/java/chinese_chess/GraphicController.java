@@ -1,6 +1,9 @@
 package chinese_chess;
 
+import GameDialogues.GameDialogue;
+import data.GameStatus;
 import data.Position;
+import data.Side;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -25,6 +28,7 @@ public class GraphicController {
         elements.WindowRoot = new Pane();
         elements.WindowRoot.setStyle("-fx-background-color: black");
 
+        elements.Dialogue=new GameDialogue();
 
         elements.GameRoot = new Pane();
         elements.GameRoot.setStyle("-fx-background-color: white");
@@ -73,17 +77,17 @@ public class GraphicController {
         elements.GamePane.getChildren().add(elements.GameMenu);
 
         //两边文字标签
-        elements.bLabel = new Label("Black Player");
+        elements.bLabel = new Label("黑方");
         elements.bLabel.setWrapText(true);
         elements.bLabel.setStyle("-fx-font-size: 20; -fx-text-fill: black;");
         elements.BlackMenu.getChildren().add(elements.bLabel);
 
-        elements.rLabel = new Label("Red Player");
+        elements.rLabel = new Label("红方");
         elements.rLabel.setWrapText(true);
         elements.rLabel.setStyle("-fx-font-size: 20; -fx-text-fill: red;");
         elements.RedMenu.getChildren().add(elements.rLabel);
 
-        elements.gLabel = new Label("Game Menu");
+        elements.gLabel = new Label("游戏菜单");
         elements.gLabel.setWrapText(true);
         elements.gLabel.setStyle("-fx-font-size: 20; -fx-text-fill: blue;");
         elements.GameMenu.getChildren().add(elements.gLabel);
@@ -110,7 +114,6 @@ public class GraphicController {
         elements.WhosTurn = new Label("");
         elements.WhosTurn.setStyle("-fx-font-size: 16; -fx-text-fill: black;");
         elements.GameMenu.getChildren().add(elements.WhosTurn);
-        elements.WhosTurn.setText("请红方先手");
         elements.gLabel.setWrapText(true);
 
 
@@ -193,15 +196,76 @@ public class GraphicController {
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
-                    System.out.printf("Hovering (%d, %d)\n",X,Y);
+                    //System.out.printf("Hovering (%d, %d)\n",X,Y);
                     HoverChangedFlag=false;
                 }
             }
 
         });
+        elements.BlackRegret = new Button("悔棋");
+        elements.RedRegret = new Button("悔棋");
+        elements.BlackMenu.getChildren().add(elements.BlackRegret);
+        elements.RedMenu.getChildren().add(elements.RedRegret);
+        elements.BlackRegret.setOnAction(event -> {
+            try {
+                elements.game.getBoard().regretLastMove();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                GraphicController.refreshWindow(elements);
+            } catch (Exception e){
+                throw new RuntimeException(e);
+            }
+        });
+        elements.RedRegret.setOnAction(event -> {
+            try {
+                elements.game.getBoard().regretLastMove();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                GraphicController.refreshWindow(elements);
+            } catch (Exception e){
+                throw new RuntimeException(e);
+            }
+        });
+
+        elements.BlackSignIn = new Button("登录/注册");
+        elements.RedSignIn = new Button("登录/注册");
+        elements.BlackMenu.getChildren().add(elements.BlackSignIn);
+        elements.RedMenu.getChildren().add(elements.RedSignIn);
+        elements.BlackSignIn.setOnAction(actionEvent -> {
+            elements.Dialogue.startInputDialogue(elements,"登入","输入用户名","user-name",stage,"Username");
+        });
     }
 
-    static void refreshWindow(GraphicElements elements) throws Exception {
+    public static void refreshWindow(GraphicElements elements) throws Exception {
+        if(elements.game.getGameStatus()== GameStatus.ONGOING){
+            if(elements.game.getBoard().getCurrentTurn().equals(Side.BLACK)){
+                elements.WhosTurn.setText("请黑方行棋");
+                elements.BlackRegret.setDisable(true);
+                elements.RedRegret.setDisable(false);
+            }else{
+                elements.WhosTurn.setText("请红方行棋");
+                elements.BlackRegret.setDisable(false);
+                elements.RedRegret.setDisable(true);
+            }
+        }else if(elements.game.getGameStatus()==GameStatus.RED_WIN){
+            elements.WhosTurn.setText("红方胜利");
+            elements.BlackRegret.setDisable(true);
+            elements.RedRegret.setDisable(true);
+        }else if(elements.game.getGameStatus()==GameStatus.BLACK_WIN){
+            elements.WhosTurn.setText("黑方胜利");
+            elements.BlackRegret.setDisable(true);
+            elements.RedRegret.setDisable(true);
+        }else if(/*在此讨论Stalemate的情况*/false){
+
+        }
+        if(elements.game.getBoard().moveHistory.isEmpty()==true){
+            elements.BlackRegret.setDisable(true);
+            elements.RedRegret.setDisable(true);
+        }
         double BoardWidth;
         double BoardHeight;
         elements.GameRoot.setPrefSize(elements.WindowRoot.getWidth(),elements.WindowRoot.getHeight());
@@ -255,6 +319,11 @@ public class GraphicController {
             for (var u : elements.game.getBoard().getPieceAt(elements.game.getBoard().getSelectedPosition()).getLegalMoves(elements.game.getBoard(),elements.game.getBoard().getSelectedPosition())){
                 RenderBoard.drawMoveIndicator(elements,u.getRow(),u.getCol(),GridWidth);
             }
+        }
+
+        //窗口，最后画是为了保持在最上方
+        if(elements.Dialogue.isActive()){
+            elements.Dialogue.updateDialogue(elements.WindowRoot.getWidth(),elements.WindowRoot.getHeight());
         }
     }
 }

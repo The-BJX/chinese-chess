@@ -204,19 +204,7 @@ public class RenderBoard {
                 throw new RuntimeException(e);
             }
             System.out.printf("Indicator at (%d,%d) touched\n",x,y);
-            if(elements.game.getGameStatus()==GameStatus.ONGOING){
-                if(elements.game.getBoard().getCurrentTurn().equals(Side.BLACK)){
-                    elements.WhosTurn.setText("请黑方行棋");
-                }else{
-                    elements.WhosTurn.setText("请红方行棋");
-                }
-            }else if(elements.game.getGameStatus()==GameStatus.RED_WIN){
-                elements.WhosTurn.setText("红方胜利");
-            }else if(elements.game.getGameStatus()==GameStatus.BLACK_WIN){
-                elements.WhosTurn.setText("黑方胜利");
-            }else if(/*在此讨论Stalemate的情况*/false){
 
-            }
             try {
                 GraphicController.refreshWindow(elements);
             } catch (Exception e) {

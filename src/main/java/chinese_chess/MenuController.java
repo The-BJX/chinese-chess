@@ -12,7 +12,6 @@ public class MenuController {
         if(type==TypeOfInit.General){
             System.out.println("Starting New Game");
             elements.game=new Game();
-            elements.WhosTurn.setText("请红方先手");
             //elements.GameMenu.getChildren().remove(elements.NewGame);
             //elements.GameMenu.getChildren().remove(elements.LoadFromSave);
             if(false==elements.GameMenu.getChildren().contains(elements.WhosTurn))
@@ -35,6 +34,8 @@ public class MenuController {
     static void saveGame(GraphicElements elements, Stage stage)throws Exception{
         System.out.println("Saving current");
         FileChooser fileChooser = new FileChooser();
+        //fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Game Save File","*.dat"));
+
         fileChooser.setTitle("保存残局");
         File file = fileChooser.showSaveDialog(stage);
         elements.game.getBoard().saveBoard(file.getPath());
