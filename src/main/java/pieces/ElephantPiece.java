@@ -40,7 +40,22 @@ public class ElephantPiece extends Piece{
             }
         }
 
-        return legalMoves;
+        List<Position> ret = new java.util.ArrayList<>();
+
+        for(Position pos:legalMoves){
+            int toRow=pos.getRow();
+            int toCol=pos.getCol();
+            int elephantEyeRow = (currentRow + toRow)/2;
+            int elephantEyeCol = (currentCol + toCol)/2;
+            Position elephantEyePos= new Position(elephantEyeRow, elephantEyeCol);
+            Piece elephantEyePiece=board.getPieceAt(elephantEyePos);
+            if(elephantEyePiece==null){
+                ret.add(pos);
+            }
+
+        }
+
+        return ret;
     }
 
 }
