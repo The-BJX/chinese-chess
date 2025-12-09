@@ -146,7 +146,8 @@ public class RenderBoard {
             tmplabel.setLayoutX((y+0.6)*GridWidth);
             tmplabel.setLayoutY((x+0.58)*GridWidth);
 
-        }else{
+        }
+        else{
             tmplabel.setLayoutX((y+0.5)*GridWidth);
             tmplabel.setLayoutY((x+0.68)*GridWidth);
 
