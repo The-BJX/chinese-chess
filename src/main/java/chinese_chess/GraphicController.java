@@ -1,11 +1,13 @@
 package chinese_chess;
 
 import GameDialogues.GameDialogue;
+import UserData.UserDataKeeper;
 import data.GameStatus;
 import data.Position;
 import data.Side;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -86,6 +88,17 @@ public class GraphicController {
         elements.rLabel.setWrapText(true);
         elements.rLabel.setStyle("-fx-font-size: 20; -fx-text-fill: red;");
         elements.RedMenu.getChildren().add(elements.rLabel);
+
+
+        elements.BlackUsername=new String("黑方游客");
+        elements.RedUsername=new String("红方游客");
+        elements.BlackUserLabel = new Label(elements.BlackUsername);
+        elements.RedUserLabel = new Label(elements.RedUsername);
+        elements.BlackUserLabel.setStyle("-fx-text-fill:black; -fx-font-size:16;");
+        elements.RedUserLabel.setStyle("-fx-text-fill:red; -fx-font-size:16;");
+        elements.BlackMenu.getChildren().add(elements.BlackUserLabel);
+        elements.RedMenu.getChildren().add(elements.RedUserLabel);
+
 
         elements.gLabel = new Label("游戏菜单");
         elements.gLabel.setWrapText(true);
@@ -236,8 +249,32 @@ public class GraphicController {
         elements.BlackMenu.getChildren().add(elements.BlackSignIn);
         elements.RedMenu.getChildren().add(elements.RedSignIn);
         elements.BlackSignIn.setOnAction(actionEvent -> {
-            elements.Dialogue.startInputDialogue(elements,"登入","输入用户名","user-name",stage,"Username");
+            if(elements.BlackSignIn.getText().equals("登录/注册"))
+                elements.Dialogue.startInputDialogue(elements,"登入","输入用户名","user-name",stage,"Username",Side.BLACK);
+            else{
+                elements.BlackUsername=new String("黑方游客");
+                elements.BlackSignIn.setText("登录/注册");
+                try{GraphicController.refreshWindow(elements);}catch (Exception e){};
+            }
         });
+        elements.RedSignIn.setOnAction(actionEvent -> {
+            if(elements.RedSignIn.getText().equals("登录/注册"))
+                elements.Dialogue.startInputDialogue(elements,"登入","输入用户名","user-name",stage,"Username",Side.RED);
+            else{
+                elements.RedUsername=new String("红方游客");
+                elements.RedSignIn.setText("登录/注册");
+                try{GraphicController.refreshWindow(elements);}catch (Exception e){};
+            }
+        });
+
+        elements.userDataKeeper = new UserDataKeeper();
+        elements.userDataKeeper.loadField();
+        //elements.userDataKeeper.addMd5("ce8385dfd627955cc2fff43ed2d9372c");
+        elements.Register = new Button("注册");
+        elements.Register.setOnAction(actionEvent -> {
+            elements.Dialogue.startInputDialogue(elements,"注册","输入用户名","username",stage,"RegisterUsername",null);
+        });
+        elements.GameMenu.getChildren().add(elements.Register);
     }
 
     public static void refreshWindow(GraphicElements elements) throws Exception {
@@ -297,6 +334,8 @@ public class GraphicController {
         elements.rLabel.setMaxWidth((elements.GameRoot.getWidth()- BoardWidth)/2-2*ConstantValues.MENU_PADDING);
         elements.gLabel.setMaxWidth((elements.GameRoot.getWidth()- BoardWidth)/2-2*ConstantValues.MENU_PADDING);
 
+        elements.BlackUserLabel.setText(elements.BlackUsername);
+        elements.RedUserLabel.setText(elements.RedUsername);
 
         //画棋盘
         GridWidth = BoardWidth/10;

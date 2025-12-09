@@ -3,6 +3,7 @@ package chinese_chess;
 import Core.Board;
 import Game.Game;
 import GameDialogues.GameDialogue;
+import UserData.UserDataKeeper;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
@@ -31,7 +32,7 @@ public class GraphicElements {
 
     Button NewGame, LoadFromSave, SaveGame;
     Button RedRegret, BlackRegret;
-    Button RedSignIn, BlackSignIn;
+    public Button RedSignIn, BlackSignIn;
 
     Label WhosTurn;
 
@@ -40,4 +41,10 @@ public class GraphicElements {
     GameDialogue Dialogue;
     public String usernameCache;//用于传递输入框文字
     public String passwordCache;//用于传递输入框文字
+
+    public UserDataKeeper userDataKeeper;
+
+    public String BlackUsername, RedUsername;
+    public Label BlackUserLabel, RedUserLabel;
+    public Button Register;
 }

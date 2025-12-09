@@ -2,6 +2,7 @@ package GameDialogues;
 
 import chinese_chess.GraphicController;
 import chinese_chess.GraphicElements;
+import data.Side;
 import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -44,7 +45,7 @@ public class GameDialogue {
         this.widthConstant = -1;
     }
 
-    public void startInputDialogue(GraphicElements elements, String title, String question, String default_text, Stage stage, String typeOfDialogue){
+    public void startInputDialogue(GraphicElements elements, String title, String question, String default_text, Stage stage, String typeOfDialogue, Side side){
         //生成一个简易输入窗口
         setActive();
         BackgroundPane = new Pane();
@@ -87,31 +88,66 @@ public class GameDialogue {
         CancelButton.setPrefSize(2*widthConstant,heightConstant);
 
         FinishButton.setOnAction(actionEvent -> {
-            killDialogue(elements);
             if(typeOfDialogue.equals("Username")){
                 elements.usernameCache=InputField.getText();
-                startInputDialogue(elements,"登入","请输入密码","password",stage,"Password");
-                try {
-                    GraphicController.refreshWindow(elements);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
+                killDialogue(elements);
+                startInputDialogue(elements,"登入","请输入密码","password",stage,"Password",side);
+
             }else if(typeOfDialogue.equals("Password")){
                 elements.passwordCache=InputField.getText();
                 //检验是否密码正确：
                 //把用户名和密码的字符串加起来取哈希，然后文件比对
+                String hash = new String("");
                 try{
                     MessageDigest md = MessageDigest.getInstance("MD5");
                     md.update((elements.usernameCache+"GenshinImpact"+elements.passwordCache).getBytes());
-                    String hash = new BigInteger(1,md.digest()).toString(16);
+                    hash = new BigInteger(1,md.digest()).toString(16);
                     System.out.printf("md5: %s\n",hash);
                 }catch (NoSuchAlgorithmException e){e.printStackTrace();}
                 //安全的不行，亲妈都认不出来
                 //然后进行文件比对
+                if(elements.userDataKeeper.containMd5(hash)){
+                    System.out.println("登陆有效");
+                    if(side.equals(Side.BLACK)){elements.BlackUsername=elements.usernameCache;elements.BlackSignIn.setText("注销");}
+                    if(side.equals(Side.RED)){elements.RedUsername=elements.usernameCache;elements.RedSignIn.setText("注销");};
+                    killDialogue(elements);
 
+                }else{
+                    System.out.println("账号或密码错误");
+                    QuestionLabel.setText("账号或密码错误");
+                }
 
                 //正确则执行
+            }else if(typeOfDialogue.equals("RegisterUsername")){
+                elements.usernameCache=InputField.getText();
+                killDialogue(elements);
+                startInputDialogue(elements,"注册","请输入密码","password",stage,"RegisterPassword",null);
+
+            }else if(typeOfDialogue.equals("RegisterPassword")){
+                elements.passwordCache=InputField.getText();
+                //检验是否密码正确：
+                //把用户名和密码的字符串加起来取哈希，然后文件比对
+                String hash = new String("");
+                try{
+                    MessageDigest md = MessageDigest.getInstance("MD5");
+                    md.update((elements.usernameCache+"GenshinImpact"+elements.passwordCache).getBytes());
+                    hash = new BigInteger(1,md.digest()).toString(16);
+                    System.out.printf("md5: %s\n",hash);
+                }catch (NoSuchAlgorithmException e){e.printStackTrace();}
+                //安全的不行，亲妈都认不出来
+                //然后进行文件比对
+                if(elements.userDataKeeper.containMd5(hash)){
+                    System.out.println("早已注册");
+                    QuestionLabel.setText("错误：账号已注册");
+                }else{
+                    elements.userDataKeeper.addMd5(hash);
+                    System.out.println("注册成功");
+                    killDialogue(elements);
+
+                }
             }
+            try{GraphicController.refreshWindow(elements);}catch(Exception e){};
+
         });
 
         CancelButton.setOnAction(actionEvent -> {
@@ -156,6 +192,7 @@ public class GameDialogue {
     private void killDialogue(GraphicElements elements){
         shutDown();
         elements.WindowRoot.getChildren().remove(BackgroundPane);
+        try{GraphicController.refreshWindow(elements);}catch (Exception e){}
     }
 
 }
