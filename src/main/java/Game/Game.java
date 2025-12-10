@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Game{
-    private Board board= new Board();
+
     public void printBoard(){
         board.printBoard();
     }
@@ -25,9 +25,14 @@ public class Game{
     public GameStatus getGameStatus(){
         return gameStatus;
     }
-    public Game(){
+    public Game(String user){
+        this.user = user;
         gameStatus=GameStatus.ONGOING;
     }
+
+    public String user;
+    private Board board= new Board(user);
+
 
 
     public static boolean positionInList(Position pos, List<Position> posList){

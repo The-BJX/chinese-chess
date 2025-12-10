@@ -10,7 +10,7 @@ public class AutoSaver {
     LocalDateTime currentDateTime = LocalDateTime.now();
     String LocalDateTimeString = currentDateTime.toString();
     String fileName = "autosave_" + LocalDateTimeString.replace(":", "-") + ".dat";
-    public void autoSaveGameData(List<MoveRecord> moveHistory) throws Exception {
-        dataSaver.saveGameData(moveHistory, fileName);
+    public void autoSaveGameData(String username,List<MoveRecord> moveHistory) throws Exception {
+        dataSaver.saveGameData(username,moveHistory, fileName);
     }
 }

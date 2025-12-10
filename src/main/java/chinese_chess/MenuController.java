@@ -11,7 +11,7 @@ public class MenuController {
     static void initGame(Stage stage, GraphicElements elements, TypeOfInit type) throws Exception {
         if(type==TypeOfInit.General){
             System.out.println("Starting New Game");
-            elements.game=new Game();
+            elements.game=new Game(elements.Username);
             //elements.GameMenu.getChildren().remove(elements.NewGame);
             //elements.GameMenu.getChildren().remove(elements.LoadFromSave);
             if(false==elements.GameMenu.getChildren().contains(elements.WhosTurn))
@@ -27,7 +27,12 @@ public class MenuController {
             filechooser.setTitle("选取存档");
             File file = filechooser.showOpenDialog(stage);
             System.out.println(file);
-            elements.game.getBoard().loadBoardFromFile(file.getPath());
+            elements.game.getBoard().loadBoardFromFile(elements.Username,file.getPath());
+
+
+            //test
+            System.out.println(elements.Username);
+
             GraphicController.refreshWindow(elements);
         }
     }
@@ -38,6 +43,6 @@ public class MenuController {
 
         fileChooser.setTitle("保存残局");
         File file = fileChooser.showSaveDialog(stage);
-        elements.game.getBoard().saveBoard(file.getPath());
+        elements.game.getBoard().saveBoard(elements.Username,file.getPath());
     }
 }

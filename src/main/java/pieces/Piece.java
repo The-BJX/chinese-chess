@@ -30,7 +30,7 @@ public abstract class Piece {
         List<Position> legalMoves = new ArrayList<>();
 
         //create a simulate board in order to protect the game board
-        Board simBoard= new Board();
+        Board simBoard= new Board("sim");
 
         // For each unfiltered move, simulate it on the simBoard (apply then undo)
         for (Position toPos : new ArrayList<>(unfiltered)){

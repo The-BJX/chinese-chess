@@ -11,7 +11,7 @@ public class testAlgorithm {
     public static void main(String[] args) throws Exception {
         System.out.println("Hello and welcome!");
 
-        Game game = new Game();
+        Game game = new Game("testa");
         game.printBoard();
 
         System.out.printf("Now it is %s's turn",game.getBoard().getCurrentTurn());
@@ -86,7 +86,7 @@ public class testAlgorithm {
                 if(input.equals("import")){
                     System.out.println("Please enter the file path to import from:");
                     String filepath=sc.nextLine();
-                    game.getBoard().loadBoardFromFile(filepath);
+                    game.getBoard().loadBoardFromFile("testa",filepath);
                     game.printBoard();
                     System.out.printf("Now it is %s's turn",game.getBoard().getCurrentTurn());
                     if(game.getBoard().isGeneralInCheck(game.getBoard().getCurrentTurn())){

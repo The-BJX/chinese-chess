@@ -6,10 +6,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.security.MessageDigest;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Formatter;
-import java.util.List;
+import java.util.*;
 import java.util.zip.*;
 
 /**
@@ -75,13 +72,16 @@ public class ChineseChessDataSaver {
      * and a cryptographic integrity hash.
      * @param moveHistory The list of moves to save.
      */
-    public void saveGameData(List<MoveRecord> moveHistory, String filepath) throws Exception {
-        System.out.println("--- Saving Chinese Chess Move History ---");
+    public void saveGameData(String username,List<MoveRecord> moveHistory, String filepath) throws Exception {
+        System.out.println("--- Saving Chinese Chess Move History for "+username+"---");
+
+        //create a container project
+        GameSaveData gameData=new GameSaveData(username,moveHistory);
 
         // 1. Serialize Complex Object to Bytes
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(bos);
-        oos.writeObject(moveHistory); // Convert List<MoveRecord> into a byte array
+        oos.writeObject(gameData); // Convert List<gameData> into a byte array
         oos.flush();
         byte[] serializedData = bos.toByteArray();
         oos.close();
@@ -117,8 +117,8 @@ public class ChineseChessDataSaver {
      * @return The original List of MoveRecord objects, or null if tampered.
      */
     @SuppressWarnings("unchecked") // Safe cast after ObjectInputStream reads
-    public List<MoveRecord> loadGameData(String filepath) throws Exception {
-        System.out.println("--- Loading and Validating Chinese Chess Move History ---");
+    public List<MoveRecord> loadGameData(String username, String filepath) throws Exception {
+        System.out.println("--- Loading and Validating Chinese Chess Move History for "+username+"---");
         Path path = Paths.get(filepath);
         if (!Files.exists(path)) {
             System.out.println("Error: File not found at " + filepath);
@@ -169,12 +169,16 @@ public class ChineseChessDataSaver {
         ObjectInputStream ois = new ObjectInputStream(bis);
 
         // Deserialize the object back into the List<MoveRecord>
-        List<MoveRecord> moveHistory = (List<MoveRecord>) ois.readObject();
+        GameSaveData gameData = (GameSaveData) ois.readObject();
         ois.close();
         bis.close();
 
-        System.out.println("Successfully loaded and validated data from: " + filepath);
-        return moveHistory;
+        if(!Objects.equals(gameData.username, username)){
+            System.out.println("access denied");
+        }
+
+        System.out.println("Successfully loaded and validated data for "+username+" from: " + filepath);
+        return gameData.moveHistory;
     }
 
 }
