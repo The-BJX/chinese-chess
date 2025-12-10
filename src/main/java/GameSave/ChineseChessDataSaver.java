@@ -175,6 +175,7 @@ public class ChineseChessDataSaver {
 
         if(!Objects.equals(gameData.username, username)){
             System.out.println("access denied");
+            return null;
         }
 
         System.out.println("Successfully loaded and validated data for "+username+" from: " + filepath);
