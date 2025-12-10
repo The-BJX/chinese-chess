@@ -35,6 +35,9 @@ public class MenuController {
             File file = filechooser.showOpenDialog(stage);
             System.out.println(file);
             elements.game.getBoard().loadBoardFromFile(elements.Username,file.getPath());
+            //test
+            System.out.println(elements.Username);
+
             GraphicController.refreshWindow(elements);
         }else if(type==TypeOfInit.ViewRecord){
             System.out.println("复盘开始");
@@ -55,12 +58,6 @@ public class MenuController {
 
         fileChooser.setTitle("保存残局");
         File file = fileChooser.showSaveDialog(stage);
-
-        //bug fix:退出保存后会有NullPointerException报错
-        if(file==null){
-            return;
-        }
-
         elements.game.getBoard().saveBoard(elements.Username,file.getPath());
     }
     static void handleViewRecordButton(Stage stage, GraphicElements elements) throws Exception {

@@ -134,22 +134,23 @@ public class RenderBoard {
         /*for(String u:Font.getFontNames()){
             System.out.println(u);
         }*/
-
+        //TODO: 改用更好的字体解决排版问题
         Font tmpfont = Font.font("华文隶书",GridWidth/1.9);
         //tmpfont.
+
 
         tmplabel.setPrefWidth(GridWidth);
         tmplabel.setPrefHeight(GridWidth);
         tmplabel.setAlignment(Pos.CENTER);
         tmplabel.setFont(tmpfont);
         if(elements.game.getBoard().getHoverPosition()!=null&&elements.game.getBoard().getHoverPosition().equals(new Position(x,y))){
-            tmplabel.setLayoutX((y+0.6)*GridWidth);
-            tmplabel.setLayoutY((x+0.58)*GridWidth);
+            tmplabel.setLayoutX((y+0.08)*GridWidth+tmpfont.getSize());
+            tmplabel.setLayoutY((x+0.04)*GridWidth+tmpfont.getSize());
 
         }
         else{
-            tmplabel.setLayoutX((y+0.5)*GridWidth);
-            tmplabel.setLayoutY((x+0.68)*GridWidth);
+            tmplabel.setLayoutX((y-0.02)*GridWidth+tmpfont.getSize());
+            tmplabel.setLayoutY((x+0.14)*GridWidth+tmpfont.getSize());
 
         }
         tmplabel.setMouseTransparent(true);
@@ -244,4 +245,5 @@ public class RenderBoard {
         }
         elements.BoardSurface.getChildren().add(tmp);
     }
+    //TODO: 上一个棋子的起点
 }

@@ -55,5 +55,5 @@ public class GraphicElements {
     public HBox RecordControlButtons;
     public Label CurrentStep;
 
-    public Button BlackSurrender, RedSurrender, BlackCease, RedCease;//投降和求和
+    public Button BlackSurrender, RedSurrender, BlackCease, RedCease;//TODO: 投降和求和
 }
