@@ -134,6 +134,10 @@ public class Board {
 
     public void loadBoardFromFile(String username,String path) throws Exception {
         moveHistory=dataSaver.loadGameData(username,path);
+        if(moveHistory==null){
+            //TODO: 增加用户读取失败的错误提示
+            return;
+        }
         //Reinitialize the board
         for(int r=0; r<ROWS; r++){
             for(int c=0; c<COLS; c++){

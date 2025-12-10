@@ -35,8 +35,6 @@ public class MenuController {
             File file = filechooser.showOpenDialog(stage);
             System.out.println(file);
             elements.game.getBoard().loadBoardFromFile(elements.Username,file.getPath());
-
-
             //test
             System.out.println(elements.Username);
 
