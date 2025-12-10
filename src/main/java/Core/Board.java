@@ -133,7 +133,16 @@ public class Board {
     // save and load functions
 
     public void loadBoardFromFile(String username,String path) throws Exception {
+
+        List<MoveRecord>tempMoveHistory=dataSaver.loadGameData(username,path);;
+        if(tempMoveHistory==null){
+            System.out.println("load failed");
+            return;
+        }
+
         moveHistory=dataSaver.loadGameData(username,path);
+
+
         //Reinitialize the board
         for(int r=0; r<ROWS; r++){
             for(int c=0; c<COLS; c++){
