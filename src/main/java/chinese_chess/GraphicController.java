@@ -90,20 +90,16 @@ public class GraphicController {
         elements.RedMenu.getChildren().add(elements.rLabel);
 
 
-        elements.BlackUsername=new String("黑方游客");
-        elements.RedUsername=new String("红方游客");
-        elements.BlackUserLabel = new Label(elements.BlackUsername);
-        elements.RedUserLabel = new Label(elements.RedUsername);
-        elements.BlackUserLabel.setStyle("-fx-text-fill:black; -fx-font-size:16;");
-        elements.RedUserLabel.setStyle("-fx-text-fill:red; -fx-font-size:16;");
-        elements.BlackMenu.getChildren().add(elements.BlackUserLabel);
-        elements.RedMenu.getChildren().add(elements.RedUserLabel);
-
+        elements.UserLabel = new Label();
+        elements.UserLabel.setText("用户：游客");
+        elements.UserLabel.setStyle("-fx-text-fill:black; -fx-font-size:16;");
+        elements.Username="游客";
 
         elements.gLabel = new Label("游戏菜单");
         elements.gLabel.setWrapText(true);
         elements.gLabel.setStyle("-fx-font-size: 20; -fx-text-fill: blue;");
         elements.GameMenu.getChildren().add(elements.gLabel);
+        elements.GameMenu.getChildren().add(elements.UserLabel);
 
         elements.UpVerticleLine = new Line[9];
         elements.DownVerticleLine = new Line[9];
@@ -244,25 +240,14 @@ public class GraphicController {
             }
         });
 
-        elements.BlackSignIn = new Button("登录/注册");
-        elements.RedSignIn = new Button("登录/注册");
-        elements.BlackMenu.getChildren().add(elements.BlackSignIn);
-        elements.RedMenu.getChildren().add(elements.RedSignIn);
-        elements.BlackSignIn.setOnAction(actionEvent -> {
-            if(elements.BlackSignIn.getText().equals("登录/注册"))
+        elements.SignIn = new Button("登录");
+        elements.GameMenu.getChildren().add(elements.SignIn);
+        elements.SignIn.setOnAction(actionEvent -> {
+            if(elements.SignIn.getText().equals("登录"))
                 elements.Dialogue.startInputDialogue(elements,"登入","输入用户名","user-name",stage,"Username",Side.BLACK);
             else{
-                elements.BlackUsername=new String("黑方游客");
-                elements.BlackSignIn.setText("登录/注册");
-                try{GraphicController.refreshWindow(elements);}catch (Exception e){};
-            }
-        });
-        elements.RedSignIn.setOnAction(actionEvent -> {
-            if(elements.RedSignIn.getText().equals("登录/注册"))
-                elements.Dialogue.startInputDialogue(elements,"登入","输入用户名","user-name",stage,"Username",Side.RED);
-            else{
-                elements.RedUsername=new String("红方游客");
-                elements.RedSignIn.setText("登录/注册");
+                elements.Username=new String("游客");
+                elements.SignIn.setText("登录");
                 try{GraphicController.refreshWindow(elements);}catch (Exception e){};
             }
         });
@@ -334,9 +319,7 @@ public class GraphicController {
         elements.rLabel.setMaxWidth((elements.GameRoot.getWidth()- BoardWidth)/2-2*ConstantValues.MENU_PADDING);
         elements.gLabel.setMaxWidth((elements.GameRoot.getWidth()- BoardWidth)/2-2*ConstantValues.MENU_PADDING);
 
-        elements.BlackUserLabel.setText(elements.BlackUsername);
-        elements.RedUserLabel.setText(elements.RedUsername);
-
+        elements.UserLabel.setText("用户："+elements.Username);
         //画棋盘
         GridWidth = BoardWidth/10;
         RenderBoard.drawBoard(elements,GridWidth);

@@ -108,8 +108,8 @@ public class GameDialogue {
                 //然后进行文件比对
                 if(elements.userDataKeeper.containMd5(hash)){
                     System.out.println("登陆有效");
-                    if(side.equals(Side.BLACK)){elements.BlackUsername=elements.usernameCache;elements.BlackSignIn.setText("注销");}
-                    if(side.equals(Side.RED)){elements.RedUsername=elements.usernameCache;elements.RedSignIn.setText("注销");};
+                    elements.Username=elements.usernameCache;
+                    elements.SignIn.setText("注销");
                     killDialogue(elements);
 
                 }else{
