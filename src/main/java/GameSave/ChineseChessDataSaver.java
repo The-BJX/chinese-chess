@@ -73,6 +73,10 @@ public class ChineseChessDataSaver {
      * @param moveHistory The list of moves to save.
      */
     public void saveGameData(String username,List<MoveRecord> moveHistory, String filepath) throws Exception {
+        if(filepath==null){
+            return;
+        }
+
         System.out.println("--- Saving Chinese Chess Move History for "+username+"---");
 
         //create a container project
@@ -173,8 +177,12 @@ public class ChineseChessDataSaver {
         ois.close();
         bis.close();
 
-        if(!Objects.equals(gameData.username, username)){
+        if(!username.equals(gameData.username)){
             System.out.println("access denied");
+            System.out.println("this is not your data");
+            System.out.println("you are "+username);
+            System.out.println("this data belongs to "+gameData.username);
+            return null;
         }
 
         System.out.println("Successfully loaded and validated data for "+username+" from: " + filepath);
