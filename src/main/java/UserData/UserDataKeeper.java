@@ -4,7 +4,10 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class UserDataKeeper {
-    private ArrayList<User> staticField=new ArrayList<User>();
+    private ArrayList<User> staticField;
+    public UserDataKeeper(){
+        staticField = new ArrayList<User>();
+    }
     public void saveField(){
         try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("UserDataSaves.dat"))){
             oos.writeObject(staticField);

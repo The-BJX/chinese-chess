@@ -32,7 +32,7 @@ public class GraphicElements {
 
     Button NewGame, LoadFromSave, SaveGame;
     Button RedRegret, BlackRegret;
-    public Button RedSignIn, BlackSignIn;
+    public Button SignIn;
 
     Label WhosTurn;
 
@@ -44,7 +44,7 @@ public class GraphicElements {
 
     public UserDataKeeper userDataKeeper;
 
-    public String BlackUsername, RedUsername;
-    public Label BlackUserLabel, RedUserLabel;
+    public String Username;
+    public Label UserLabel;
     public Button Register;
 }
