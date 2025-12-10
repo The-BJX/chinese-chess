@@ -2,10 +2,17 @@ package chinese_chess;
 
 import Game.Game;
 import GameSave.ChineseChessDataSaver;
+import javafx.geometry.Insets;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+
+import static chinese_chess.ConstantValues.MENU_PADDING;
 
 public class MenuController {
     static void initGame(Stage stage, GraphicElements elements, TypeOfInit type) throws Exception {
@@ -29,6 +36,16 @@ public class MenuController {
             System.out.println(file);
             elements.game.getBoard().loadBoardFromFile(elements.Username,file.getPath());
             GraphicController.refreshWindow(elements);
+        }else if(type==TypeOfInit.ViewRecord){
+            System.out.println("复盘开始");
+            FileChooser filechooser= new FileChooser();
+            filechooser.setTitle("选取存档");
+            File file = filechooser.showOpenDialog(stage);
+            System.out.println(file);
+            elements.game.getBoard().loadBoardFromFile(elements.Username,file.getPath());
+            //做加载动作
+            elements.game.getBoard().returnViewToInitial();
+
         }
     }
     static void saveGame(GraphicElements elements, Stage stage)throws Exception{
@@ -45,5 +62,87 @@ public class MenuController {
         }
 
         elements.game.getBoard().saveBoard(elements.Username,file.getPath());
+    }
+    static void handleViewRecordButton(Stage stage, GraphicElements elements) throws Exception {
+        disableAllPlayerButtons(elements);
+        try {
+            MenuController.initGame(stage, elements, TypeOfInit.ViewRecord);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        //把几个按钮加上：上一步 下一步 回到起点
+        elements.NextStep = new Button("下一步");
+        elements.LastStep = new Button("上一步");
+        elements.GotoStart = new Button("回到起点");
+        elements.NextStep.setOnAction(actionEvent -> {
+            try {
+                handleRecordNextStep(elements);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+        elements.LastStep.setOnAction(actionEvent -> {
+            try {
+                handleRecordPrevStep(elements);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+        elements.GotoStart.setOnAction(actionEvent -> {
+            try {
+                handleRecordRestart(elements);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+
+        elements.RecordControlMenu = new VBox();
+        elements.RecordControlButtons = new HBox();
+        elements.RecordControlButtons.getChildren().add(elements.GotoStart);
+        elements.RecordControlButtons.getChildren().add(elements.LastStep);
+        elements.RecordControlButtons.getChildren().add(elements.NextStep);
+        elements.RecordControlMenu.setStyle("-fx-border-color:black;-fx-border-width:2px;");
+        elements.RecordControlMenu.getChildren().add(elements.RecordControlButtons);
+        elements.CurrentStep = new Label("第0步");
+        elements.CurrentStep.setStyle("-fx-font-size: 16; -fx-text-fill: black;");
+        elements.RecordControlMenu.getChildren().add(elements.CurrentStep);
+
+
+        elements.RecordControlMenu.setPadding(new Insets(MENU_PADDING/2,MENU_PADDING/2,MENU_PADDING/2,MENU_PADDING/2));
+        elements.GameMenu.getChildren().add(elements.RecordControlMenu);
+        elements.game.isViewingRecord=true;
+        GraphicController.refreshWindow(elements);
+    }
+    static void handleRecordNextStep(GraphicElements elements) throws Exception {
+        elements.game.getBoard().viewNextMove();
+        elements.CurrentStep.setText("第"+elements.game.getBoard().currentViewingStep+"步");
+        GraphicController.refreshWindow(elements);
+        disableAllPlayerButtons(elements);
+    }
+    static void handleRecordPrevStep(GraphicElements elements) throws Exception {
+        elements.game.getBoard().viewPreviousMove();
+        elements.CurrentStep.setText("第"+elements.game.getBoard().currentViewingStep+"步");
+        GraphicController.refreshWindow(elements);
+        disableAllPlayerButtons(elements);
+    }
+    static void handleRecordRestart(GraphicElements elements) throws Exception {
+        elements.game.getBoard().returnViewToInitial();
+        elements.CurrentStep.setText("第"+elements.game.getBoard().currentViewingStep+"步");
+        GraphicController.refreshWindow(elements);
+        disableAllPlayerButtons(elements);
+    }
+
+    static void disableAllPlayerButtons(GraphicElements elements) throws Exception {
+        for(var u:elements.BlackMenu.getChildren()){
+            if(u instanceof Button){
+                u.setDisable(true);
+            }
+        }
+        for(var u:elements.RedMenu.getChildren()){
+            if(u instanceof Button){
+                u.setDisable(true);
+            }
+        }
     }
 }

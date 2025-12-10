@@ -2,5 +2,6 @@ package chinese_chess;
 
 enum TypeOfInit{
     General,//从头开局
-    FromSave;//读取存档
+    FromSave,//读取存档
+    ViewRecord;//读取复盘
 }

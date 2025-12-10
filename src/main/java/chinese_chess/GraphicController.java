@@ -260,6 +260,18 @@ public class GraphicController {
             elements.Dialogue.startInputDialogue(elements,"注册","输入用户名","username",stage,"RegisterUsername",null);
         });
         elements.GameMenu.getChildren().add(elements.Register);
+
+        elements.isViewingRecord=false;
+        elements.ViewRecord = new Button("复盘");
+        elements.ViewRecord.setOnAction(e-> {
+            try {
+                MenuController.handleViewRecordButton(stage,elements);
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+        elements.GameMenu.getChildren().add(elements.ViewRecord);
+        elements.game.isViewingRecord=false;
     }
 
     public static void refreshWindow(GraphicElements elements) throws Exception {

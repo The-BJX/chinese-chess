@@ -158,12 +158,15 @@ public class RenderBoard {
         if(side==Side.BLACK)tmplabel.setTextFill(Color.BLACK);
 
         tmp.setOnMouseClicked(event -> {
-            try {
-                elements.game.touchPosition(new Position(x,y));
-            } catch (Exception e) {
-                throw new RuntimeException(e);
+            if(false==elements.game.isViewingRecord){
+                try {
+                    elements.game.touchPosition(new Position(x,y));
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+                System.out.printf("Touched piece (%d,%d)\n",x,y);
+
             }
-            System.out.printf("Touched piece (%d,%d)\n",x,y);
             if(elements.game.getBoard().getSelectedPosition()!=null)
                 System.out.printf("What is now selected: %s\n", elements.game.getBoard().getSelectedPosition().toString());
             try {

@@ -6,6 +6,7 @@ import GameDialogues.GameDialogue;
 import UserData.UserDataKeeper;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Line;
@@ -47,4 +48,12 @@ public class GraphicElements {
     public String Username;
     public Label UserLabel;
     public Button Register;
+
+    public boolean isViewingRecord;//是否是在看demo
+    public Button ViewRecord,LastStep,NextStep,GotoStart;//复盘
+    public VBox RecordControlMenu;
+    public HBox RecordControlButtons;
+    public Label CurrentStep;
+
+    public Button BlackSurrender, RedSurrender, BlackCease, RedCease;//投降和求和
 }

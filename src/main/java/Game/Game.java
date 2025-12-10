@@ -121,5 +121,5 @@ public class Game{
         }
 
     }
-
+    public boolean isViewingRecord;
 }
