@@ -390,6 +390,10 @@ public class Board {
         return currentViewingStep!=moveHistory.size();
     }
 
+    public Position previousStepFrom(){
+        return moveHistory.get(currentViewingStep).fromPosition;
+    }
+
     //win lose judgement
 
     public int judgeGameOver() throws Exception {
