@@ -98,38 +98,7 @@ public class RenderBoard {
             tmp.setLayoutY((x+1)*GridWidth);
         }
         Label tmplabel;
-        switch (type){
-            case GENERAL:
-                if(side==Side.BLACK)tmplabel = new Label("將");
-                else tmplabel = new Label("帥");
-                break;
-            case ADVISOR:
-                if(side==Side.BLACK)tmplabel = new Label("士");
-                else tmplabel = new Label("仕");
-                break;
-            case CHARIOT:
-                if(side==Side.BLACK)tmplabel = new Label("车");
-                else tmplabel = new Label("车");
-                break;
-            case SOLDIER:
-                if(side==Side.BLACK)tmplabel = new Label("兵");
-                else tmplabel = new Label("卒");
-                break;
-            case HORSE:
-                if(side==Side.BLACK)tmplabel = new Label("马");
-                else tmplabel = new Label("马");
-                break;
-            case ELEPHANT:
-                if(side==Side.BLACK)tmplabel = new Label("象");
-                else tmplabel = new Label("相");
-                break;
-            case CANNON:
-                if(side==Side.BLACK)tmplabel = new Label("炮");
-                else tmplabel = new Label("砲");
-                break;
-            default:
-                tmplabel = new Label("");
-        }
+        tmplabel=getPieceLabel(type,side);
 
         /*for(String u:Font.getFontNames()){
             System.out.println(u);
@@ -228,6 +197,33 @@ public class RenderBoard {
         tmp.setRadius(GridWidth*0.4+1);
         elements.BoardSurface.getChildren().add(tmp);
     }
+    public static void drawPrevPiece(GraphicElements elements, int x, int y, PieceType type, double GridWidth, Side side){
+        Circle tmp = new Circle();
+        tmp.setFill(Color.web("#FFD963"));
+        tmp.setRadius(GridWidth*0.4);
+        tmp.setOpacity(0.4);
+        tmp.setStroke(Paint.valueOf("#000000"));
+        tmp.setStrokeWidth(4);
+        tmp.setLayoutX((y+1)*GridWidth);
+        tmp.setLayoutY((x+1)*GridWidth);
+        Label tmplabel;
+        tmplabel=getPieceLabel(type,side);
+        tmplabel.setOpacity(0.4);
+        //TODO: 改用更好的字体解决排版问题
+        Font tmpfont = Font.font("华文隶书",GridWidth/1.9);
+        tmplabel.setPrefWidth(GridWidth);
+        tmplabel.setPrefHeight(GridWidth);
+        tmplabel.setAlignment(Pos.CENTER);
+        tmplabel.setFont(tmpfont);
+        tmplabel.setLayoutX((y-0.02)*GridWidth+tmpfont.getSize());
+        tmplabel.setLayoutY((x+0.14)*GridWidth+tmpfont.getSize());
+        tmplabel.setMouseTransparent(true);
+        if(side==Side.RED)tmplabel.setTextFill(Color.web("#df0000"));
+        if(side==Side.BLACK)tmplabel.setTextFill(Color.BLACK);
+        elements.BoardSurface.getChildren().add(tmp);
+        elements.BoardSurface.getChildren().add(tmplabel);
+
+    }
     public static void drawLighterShadow(GraphicElements elements, int x, int y, double GridWidth, boolean lifted){
         if(elements.game.getBoard().getPieceAt(new Position(x,y))!=null){
             return;
@@ -245,5 +241,42 @@ public class RenderBoard {
         }
         elements.BoardSurface.getChildren().add(tmp);
     }
-    //TODO: 上一个棋子的起点
+
+
+    public static Label getPieceLabel(PieceType type, Side side){
+        Label tmplabel;
+        switch (type){
+            case GENERAL:
+                if(side==Side.BLACK)tmplabel = new Label("將");
+                else tmplabel = new Label("帥");
+                break;
+            case ADVISOR:
+                if(side==Side.BLACK)tmplabel = new Label("士");
+                else tmplabel = new Label("仕");
+                break;
+            case CHARIOT:
+                if(side==Side.BLACK)tmplabel = new Label("车");
+                else tmplabel = new Label("车");
+                break;
+            case SOLDIER:
+                if(side==Side.BLACK)tmplabel = new Label("兵");
+                else tmplabel = new Label("卒");
+                break;
+            case HORSE:
+                if(side==Side.BLACK)tmplabel = new Label("马");
+                else tmplabel = new Label("马");
+                break;
+            case ELEPHANT:
+                if(side==Side.BLACK)tmplabel = new Label("象");
+                else tmplabel = new Label("相");
+                break;
+            case CANNON:
+                if(side==Side.BLACK)tmplabel = new Label("炮");
+                else tmplabel = new Label("砲");
+                break;
+            default:
+                tmplabel = new Label("");
+        }
+        return tmplabel;
+    }
 }

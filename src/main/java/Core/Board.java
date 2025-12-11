@@ -400,7 +400,12 @@ public class Board {
     }
 
     public Position previousStepFrom(){
-        return moveHistory.get(currentViewingStep).fromPosition;
+        if(moveHistory==null||moveHistory.isEmpty()||currentViewingStep==0)return null;
+        else return moveHistory.get(currentViewingStep-1).fromPosition;
+    }
+    public Position previousStepTo(){
+        if(moveHistory==null||moveHistory.isEmpty()||currentViewingStep==0)return null;
+        else return (moveHistory.get(currentViewingStep-1).toPosition);
     }
 
     //win lose judgement

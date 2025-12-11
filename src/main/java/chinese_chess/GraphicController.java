@@ -277,13 +277,17 @@ public class GraphicController {
     public static void refreshWindow(GraphicElements elements) throws Exception {
         if(elements.game.getGameStatus()== GameStatus.ONGOING){
             if(elements.game.getBoard().getCurrentTurn().equals(Side.BLACK)){
-                elements.WhosTurn.setText("请黑方行棋");
-                elements.BlackRegret.setDisable(true);
-                elements.RedRegret.setDisable(false);
+                elements.WhosTurn.setText("黑方行棋");
+                if(elements.game.isViewingRecord==false){
+                    elements.BlackRegret.setDisable(true);
+                    elements.RedRegret.setDisable(false);
+                }
             }else{
-                elements.WhosTurn.setText("请红方行棋");
-                elements.BlackRegret.setDisable(false);
-                elements.RedRegret.setDisable(true);
+                elements.WhosTurn.setText("红方行棋");
+                if(elements.game.isViewingRecord==false){
+                    elements.BlackRegret.setDisable(false);
+                    elements.RedRegret.setDisable(true);
+                }
             }
         }else if(elements.game.getGameStatus()==GameStatus.RED_WIN){
             elements.WhosTurn.setText("红方胜利");
@@ -354,10 +358,16 @@ public class GraphicController {
                 RenderBoard.drawMoveIndicator(elements,u.getRow(),u.getCol(),GridWidth);
             }
         }
-
+        //上一步起点
+        Position prev = elements.game.getBoard().previousStepFrom();
+        Position curr = elements.game.getBoard().previousStepTo();
+        if(prev!=null){
+            RenderBoard.drawPrevPiece(elements,prev.getRow(),prev.getCol(),elements.game.getBoard().getPieceAt(curr).pieceType,GridWidth,elements.game.getBoard().getPieceAt(curr).side);
+        }
         //窗口，最后画是为了保持在最上方
         if(elements.Dialogue.isActive()){
             elements.Dialogue.updateDialogue(elements.WindowRoot.getWidth(),elements.WindowRoot.getHeight());
         }
+
     }
 }
