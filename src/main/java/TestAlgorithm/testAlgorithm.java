@@ -1,6 +1,7 @@
 package TestAlgorithm;
 //this file is now for test only
 import Game.Game;
+import GameSave.ChineseChessDataSaver;
 import GameSave.MoveRecord;
 import data.Side;
 import pieces.Piece;
@@ -22,7 +23,7 @@ public class testAlgorithm {
         }
 
 
-        AIMove bot=new AIMove(2);
+        AIMove bot=new AIMove(3);
 
 
         Scanner sc= new Scanner(System.in);

@@ -7,6 +7,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.zip.*;
 
@@ -180,19 +181,9 @@ public class ChineseChessDataSaver {
 
 
 
-        Board tempInitialBoard=gameData.initialBoard;
-        Board tempFinalBoard=gameData.finalBoard;
-        List<MoveRecord> tempMoveHistory=gameData.moveHistory;
-        for(MoveRecord moveRecord:tempMoveHistory){
-            tempInitialBoard.movePiece(moveRecord.fromPosition,moveRecord.toPosition,false);
-        }
-        if(!tempFinalBoard.equals(tempFinalBoard)){
-            System.out.println("File been tampered, load failed");
-            return null;
-        }
 
 
-        if(!username.equals(gameData.username)){
+        if(!username.equals(gameData.username)&&gameData.publicness==GameSavePublicness.PRIVATE){
             System.out.println("access denied");
             System.out.println("this is not your data");
             System.out.println("you are "+username);
@@ -202,6 +193,112 @@ public class ChineseChessDataSaver {
 
         System.out.println("Successfully loaded and validated data for "+username+" from: " + filepath);
         return gameData.moveHistory;
+    }
+
+    public static void forceSave(GameSaveData gameData,String filepath) throws IOException, NoSuchAlgorithmException {
+        if(filepath==null){
+            return;
+        }
+
+        // 1. Serialize Complex Object to Bytes
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(bos);
+        oos.writeObject(gameData); // Convert List<gameData> into a byte array
+        oos.flush();
+        byte[] serializedData = bos.toByteArray();
+        oos.close();
+        bos.close();
+
+        System.out.println("Original size (Serialized): " + serializedData.length + " bytes");
+
+        // 2. Obscure Data (Compression)
+        byte[] compressedData = compress(serializedData);
+        System.out.println("Compressed size: " + compressedData.length + " bytes");
+
+        // 3. Create Integrity Hash
+        MessageDigest digest = MessageDigest.getInstance(HASH_ALGORITHM);
+        byte[] hashBytes = digest.digest(compressedData);
+        String sha256Hash = bytesToHex(hashBytes);
+        System.out.println("Calculated Hash (" + HASH_ALGORITHM + "): " + sha256Hash);
+
+        // 4. Write to File
+        // Combine the hash string, the separator, and the compressed data bytes
+        byte[] hashLine = (sha256Hash + (char)SEPARATOR).getBytes(StandardCharsets.US_ASCII);
+        byte[] fileContent = new byte[hashLine.length + compressedData.length];
+
+        System.arraycopy(hashLine, 0, fileContent, 0, hashLine.length);
+        System.arraycopy(compressedData, 0, fileContent, hashLine.length, compressedData.length);
+
+        Files.write(Paths.get(filepath), fileContent, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+
+        System.out.println("Successfully force saved to: " + filepath + "\n");
+    }
+
+    public void publishGameData(String filepath) throws Exception {
+        Path path = Paths.get(filepath);
+        if (!Files.exists(path)) {
+            System.out.println("Error: File not found at " + filepath);
+            return;
+        }
+
+        // 1. Read Data and Expected Hash
+        byte[] fileContent = Files.readAllBytes(path);
+
+        // Find the separator (the newline character)
+        int separatorIndex = -1;
+        for (int i = 0; i < fileContent.length; i++) {
+            if (fileContent[i] == SEPARATOR) {
+                separatorIndex = i;
+                break;
+            }
+        }
+
+        if (separatorIndex == -1) {
+            System.out.println("!!! CRITICAL ERROR: File format corrupted (no hash separator) !!!");
+            return;
+        }
+
+        // Extract expected hash and compressed data
+        String expectedHash = new String(fileContent, 0, separatorIndex, StandardCharsets.US_ASCII);
+        byte[] compressedData = Arrays.copyOfRange(fileContent, separatorIndex + 1, fileContent.length);
+
+        // 2. Recalculate Hash
+        MessageDigest digest = MessageDigest.getInstance(HASH_ALGORITHM);
+        byte[] recalculatedHashBytes = digest.digest(compressedData);
+        String recalculatedHash = bytesToHex(recalculatedHashBytes);
+
+        System.out.println("Expected Hash:      " + expectedHash);
+        System.out.println("Recalculated Hash:  " + recalculatedHash);
+
+        // 3. Integrity Check
+        if (!expectedHash.equals(recalculatedHash)) {
+            System.out.println("\n!!! SECURITY WARNING: DATA TAMPERED OR CORRUPTED !!!");
+            return;
+        }
+
+        System.out.println("Integrity Check PASSED. Data is trustworthy.");
+
+        // 4. Decompress and Deserialize
+        byte[] dataBytes = decompress(compressedData);
+
+        ByteArrayInputStream bis = new ByteArrayInputStream(dataBytes);
+        ObjectInputStream ois = new ObjectInputStream(bis);
+
+        // Deserialize the object back into the List<MoveRecord>
+        GameSaveData gameData = (GameSaveData) ois.readObject();
+        ois.close();
+        bis.close();
+
+
+        if(gameData.publicness==GameSavePublicness.PUBLIC){
+            System.out.println("Already public");
+            return;
+        }
+
+
+        gameData.setPublicness(GameSavePublicness.PUBLIC);
+
+        forceSave(gameData,filepath);
     }
 
 }
