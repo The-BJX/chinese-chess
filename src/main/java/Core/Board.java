@@ -13,7 +13,6 @@ import javafx.geometry.Pos;
 import pieces.GeneralPiece;
 import pieces.Piece;
 
-import java.io.Serializable;
 import java.util.List;
 
 
