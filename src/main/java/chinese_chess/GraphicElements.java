@@ -1,5 +1,6 @@
 package chinese_chess;
 
+import AIMove.AIMove;
 import Core.Board;
 import Game.Game;
 import GameDialogues.GameDialogue;
@@ -60,4 +61,7 @@ public class GraphicElements {
 
     public Button BlackSurrender, RedSurrender;//投降和求和
     public Font ChessFont;
+
+    public AIMove aiMove;
+    public Button BlackAIAssist, RedAIAssist;
 }

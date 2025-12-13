@@ -1,5 +1,7 @@
 package chinese_chess;
 
+import AIMove.AIMove;
+import GameSave.MoveRecord;
 import data.GameStatus;
 import data.PieceType;
 import data.Position;
@@ -78,7 +80,6 @@ public class RenderBoard {
         elements.Hanjie.setMouseTransparent(true);
 
     }
-
     public static void drawPiece(GraphicElements elements, int x, int y, PieceType type, double GridWidth, Side side){
         Circle tmp = new Circle();
         tmp.setFill(Color.web("#FFD963"));
@@ -211,11 +212,42 @@ public class RenderBoard {
         tmplabel.setLayoutX((y-0.02)*GridWidth+tmpfont.getSize());
         tmplabel.setLayoutY((x-0.05)*GridWidth+tmpfont.getSize());
         tmplabel.setMouseTransparent(true);
+        tmp.setMouseTransparent(true);
         if(side==Side.RED)tmplabel.setTextFill(Color.web("#df0000"));
         if(side==Side.BLACK)tmplabel.setTextFill(Color.BLACK);
         elements.BoardSurface.getChildren().add(tmp);
         elements.BoardSurface.getChildren().add(tmplabel);
-
+    }
+    public static void drawRecommendedMove(GraphicElements elements, double GridWidth){
+        //This function is out of use.
+        MoveRecord move = elements.aiMove.getCurSuggestedMove();
+        int x=move.toPosition.getRow();
+        int y=move.toPosition.getCol();
+        PieceType type = elements.game.getBoard().getPieceAt(move.fromPosition).pieceType;
+        Circle tmp = new Circle();
+        tmp.setFill(Color.web("#A6B2D7"));
+        tmp.setRadius(GridWidth*0.4);
+        tmp.setOpacity(0.4);
+        tmp.setStroke(Paint.valueOf("#000000"));
+        tmp.setStrokeWidth(4);
+        tmp.setLayoutX((y+1)*GridWidth);
+        tmp.setLayoutY((x+1)*GridWidth);
+        Label tmplabel;
+        tmplabel=getPieceLabel(type,elements.game.getBoard().getCurrentTurn());
+        tmplabel.setOpacity(0.4);
+        Font tmpfont = Font.loadFont("file:HZW005.ttf",GridWidth/1.9);
+        tmplabel.setPrefWidth(GridWidth);
+        tmplabel.setPrefHeight(GridWidth);
+        tmplabel.setAlignment(Pos.CENTER);
+        tmplabel.setFont(tmpfont);
+        tmplabel.setLayoutX((y-0.02)*GridWidth+tmpfont.getSize());
+        tmplabel.setLayoutY((x-0.05)*GridWidth+tmpfont.getSize());
+        tmplabel.setMouseTransparent(true);
+        tmp.setMouseTransparent(true);
+        if(elements.game.getBoard().getCurrentTurn()==Side.RED)tmplabel.setTextFill(Color.web("#df0000"));
+        if(elements.game.getBoard().getCurrentTurn()==Side.BLACK)tmplabel.setTextFill(Color.BLACK);
+        elements.BoardSurface.getChildren().add(tmp);
+        elements.BoardSurface.getChildren().add(tmplabel);
     }
     public static void drawLighterShadow(GraphicElements elements, int x, int y, double GridWidth, boolean lifted){
         if(elements.game.getBoard().getPieceAt(new Position(x,y))!=null){

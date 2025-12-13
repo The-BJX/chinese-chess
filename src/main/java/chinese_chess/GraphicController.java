@@ -1,6 +1,8 @@
 package chinese_chess;
 
+import AIMove.AIMove;
 import GameDialogues.GameDialogue;
+import GameSave.MoveRecord;
 import UserData.UserDataKeeper;
 import data.GameStatus;
 import data.Position;
@@ -287,6 +289,53 @@ public class GraphicController {
             }
         });
 
+        elements.BlackAIAssist = new Button("机器代下");
+        elements.RedAIAssist = new Button("机器代下");
+        elements.BlackMenu.getChildren().add(elements.BlackAIAssist);
+        elements.RedMenu.getChildren().add(elements.RedAIAssist);
+        elements.BlackAIAssist.setOnAction(actionEvent -> {
+            if(elements.game.getGameStatus().equals(GameStatus.ONGOING)) {
+                MoveRecord move = null;
+                try {
+                    move = elements.aiMove.findBestMove(elements.game.getBoard(),elements.game.getBoard().getCurrentTurn());
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+                try {
+                    elements.game.touchPosition(move.fromPosition);
+                    elements.game.touchPosition(move.toPosition);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            try {
+                GraphicController.refreshWindow(elements);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+        elements.RedAIAssist.setOnAction(actionEvent -> {
+            if(elements.game.getGameStatus().equals(GameStatus.ONGOING)) {
+                MoveRecord move = null;
+                try {
+                    move = elements.aiMove.findBestMove(elements.game.getBoard(),elements.game.getBoard().getCurrentTurn());
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+                try {
+                    elements.game.touchPosition(move.fromPosition);
+                    elements.game.touchPosition(move.toPosition);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            try {
+                GraphicController.refreshWindow(elements);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+
         elements.SignIn = new Button("登录");
         elements.GameMenu.getChildren().add(elements.SignIn);
         elements.SignIn.setOnAction(actionEvent -> {
@@ -321,6 +370,7 @@ public class GraphicController {
         elements.game.isViewingRecord=false;
         elements.ChessFont = Font.loadFont("file:HZW005.ttf",20);
 
+        elements.aiMove = new AIMove(2);
     }
 
     public static void refreshWindow(GraphicElements elements) throws Exception {
@@ -330,12 +380,16 @@ public class GraphicController {
                 if(elements.game.isViewingRecord==false){
                     elements.BlackRegret.setDisable(true);
                     elements.RedRegret.setDisable(false);
+                    elements.BlackAIAssist.setDisable(false);
+                    elements.RedAIAssist.setDisable(true);
                 }
             }else{
                 elements.WhosTurn.setText("红方行棋");
                 if(elements.game.isViewingRecord==false){
                     elements.BlackRegret.setDisable(false);
                     elements.RedRegret.setDisable(true);
+                    elements.BlackAIAssist.setDisable(true);
+                    elements.RedAIAssist.setDisable(false);
                 }
             }
         }else if(elements.game.getGameStatus()==GameStatus.RED_WIN){
@@ -412,6 +466,12 @@ public class GraphicController {
         if(prev!=null){
             RenderBoard.drawPrevPiece(elements,prev.getRow(),prev.getCol(),elements.game.getBoard().getPieceAt(curr).pieceType,GridWidth,elements.game.getBoard().getPieceAt(curr).side);
         }
+
+//        if(elements.game.getGameStatus()==GameStatus.ONGOING){
+//            RenderBoard.drawRecommendedMove(elements,GridWidth);
+//        }
+//落子提示。该功能已废除
+
         //窗口，最后画是为了保持在最上方
         if(elements.Dialogue.isActive()){
             elements.Dialogue.updateDialogue(elements.WindowRoot.getWidth(),elements.WindowRoot.getHeight());

@@ -16,10 +16,18 @@ import java.util.List;
 public class AIMove {
     private final int maxDepth;
     private static final int MATE_SCORE = 1000000;
-
+    private MoveRecord curSuggestedMove;
+    public MoveRecord getCurSuggestedMove() {
+        return curSuggestedMove;
+    }
+    public void setCurSuggestedMove(MoveRecord curSuggestedMove) {
+        this.curSuggestedMove = curSuggestedMove;
+    }
     public AIMove(int maxDepth){
         this.maxDepth = Math.max(1, maxDepth);
     }
+
+
 
     public MoveRecord findBestMove(Board board, Side side) throws Exception {
         MoveRecord bestMove = null;
