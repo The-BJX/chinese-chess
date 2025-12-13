@@ -2,12 +2,15 @@ package GameDialogues;
 
 import chinese_chess.GraphicController;
 import chinese_chess.GraphicElements;
+import data.GameStatus;
 import data.Side;
 import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
@@ -87,6 +90,7 @@ public class GameDialogue {
         CancelButton.setLayoutY(stage.getMaxHeight()*0.7-heightConstant/2);
         CancelButton.setPrefSize(2*widthConstant,heightConstant);
 
+
         FinishButton.setOnAction(actionEvent -> {
             if(typeOfDialogue.equals("Username")){
                 elements.usernameCache=InputField.getText();
@@ -148,13 +152,20 @@ public class GameDialogue {
 
             };
 
+
             try{GraphicController.refreshWindow(elements);}catch(Exception e){}
 
         });
-
+        InputField.setOnKeyPressed(keyEvent -> {
+            if(keyEvent.getCode().equals(KeyCode.ENTER)){
+                FinishButton.fire();
+            }
+            keyEvent.consume();
+        });
         CancelButton.setOnAction(actionEvent -> {
             killDialogue(elements);
         });
+
 
         elements.WindowRoot.getChildren().add(BackgroundPane);
 
@@ -180,10 +191,11 @@ public class GameDialogue {
         QuestionLabel.setLayoutX(width/4-widthConstant/2);
         QuestionLabel.setLayoutY(height*0.2+heightConstant*2);
 
-        InputField.setLayoutX(width/4-widthConstant/2);
-        InputField.setLayoutY(height*0.2+heightConstant*3.5);
-        InputField.setPrefSize(2*widthConstant,heightConstant);
-
+        if(InputField != null){
+            InputField.setLayoutX(width/4-widthConstant/2);
+            InputField.setLayoutY(height*0.2+heightConstant*3.5);
+            InputField.setPrefSize(2*widthConstant,heightConstant);
+        }
         FinishButton.setLayoutX(width/4-widthConstant/2);
         FinishButton.setLayoutY(height*0.2+heightConstant*5);
         FinishButton.setPrefSize(widthConstant,heightConstant);
@@ -195,6 +207,65 @@ public class GameDialogue {
         shutDown();
         elements.WindowRoot.getChildren().remove(BackgroundPane);
         try{GraphicController.refreshWindow(elements);}catch (Exception e){}
+        InputField = null;
     }
+    public void startTieDialogue(GraphicElements elements, Stage stage){
+        //生成一个简易输入窗口
+        setActive();
+        BackgroundPane = new Pane();
+        BackgroundPane.setLayoutX(0);
+        BackgroundPane.setLayoutY(0);
+        BackgroundPane.setPrefSize(stage.getMaxWidth(),stage.getMaxHeight());
+        BackgroundPane.setStyle("-fx-background-color: #FFFFFF;");
+        BackgroundPane.setOpacity(0.98);
 
+        QuestionLabel = new Label("是否同意？");
+        QuestionLabel.setStyle("-fx-font-size: 20; -fx-text-fill: black;");
+        widthConstant=140;
+        heightConstant=40;
+
+        QuestionLabel.setLayoutX(stage.getMaxWidth()/2-widthConstant/2);
+        QuestionLabel.setLayoutY(stage.getMaxHeight()*0.35-heightConstant/2);
+
+        TitleLabel = new Label("求和");
+        TitleLabel.setStyle("-fx-font-size: 40; -fx-text-fill: black;");
+        TitleLabel.setLayoutX(stage.getMaxWidth()/2-widthConstant/2);
+        TitleLabel.setLayoutY(stage.getMaxHeight()*0.3-heightConstant/2);
+
+        FinishButton = new Button("接受");
+        FinishButton.setLayoutX(stage.getMaxWidth()/2-widthConstant/2);
+        FinishButton.setLayoutY(stage.getMaxHeight()*0.7-heightConstant/2);
+        FinishButton.setPrefSize(2*widthConstant,heightConstant);
+
+        CancelButton = new Button("拒绝");
+        CancelButton.setLayoutX(stage.getMaxWidth()/2-widthConstant/2);
+        CancelButton.setLayoutY(stage.getMaxHeight()*0.7-heightConstant/2);
+        CancelButton.setPrefSize(2*widthConstant,heightConstant);
+
+        FinishButton.setOnAction(actionEvent -> {
+            //同意平局
+            elements.game.setGameStatus(GameStatus.TIE);
+            killDialogue(elements);
+            try{GraphicController.refreshWindow(elements);}catch(Exception e){}
+        });
+        CancelButton.setOnAction(actionEvent -> {
+            killDialogue(elements);
+            try{GraphicController.refreshWindow(elements);}catch(Exception e){}
+        });
+
+
+        elements.WindowRoot.getChildren().add(BackgroundPane);
+
+        BackgroundPane.getChildren().add(TitleLabel);
+        BackgroundPane.getChildren().add(QuestionLabel);
+        BackgroundPane.getChildren().add(FinishButton);
+        BackgroundPane.getChildren().add(CancelButton);
+
+        BackgroundPane.setMouseTransparent(false);
+        try {
+            GraphicController.refreshWindow(elements);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

@@ -23,6 +23,12 @@ public class MenuController {
             //elements.GameMenu.getChildren().remove(elements.LoadFromSave);
             if(false==elements.GameMenu.getChildren().contains(elements.WhosTurn))
                 elements.GameMenu.getChildren().add(elements.WhosTurn);
+
+            elements.BlackSurrender.setDisable(false);
+            elements.BlackAskTie.setDisable(false);
+            elements.RedSurrender.setDisable(false);
+            elements.RedAskTie.setDisable(false);
+
             GraphicController.refreshWindow(elements);
             /*从头开始一个游戏*/
         }else if(type==TypeOfInit.FromSave){

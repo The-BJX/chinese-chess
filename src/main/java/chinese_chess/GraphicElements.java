@@ -37,7 +37,7 @@ public class GraphicElements {
 
     Label WhosTurn;
 
-    Game game;
+    public Game game;
 
     GameDialogue Dialogue;
     public String usernameCache;//用于传递输入框文字
@@ -48,6 +48,8 @@ public class GraphicElements {
     public String Username;
     public Label UserLabel;
     public Button Register;
+    public Button BlackAskTie;
+    public Button RedAskTie;
 
     public boolean isViewingRecord;//是否是在看demo
     public Button ViewRecord,LastStep,NextStep,GotoStart;//复盘

@@ -26,7 +26,7 @@ public class GraphicController {
     static void setSelection(GridPoint u){
         Selection = u;
     }
-    static void initGraphics(Stage stage, GraphicElements elements){
+    static void initGraphics(Stage stage, GraphicElements elements) throws Exception {
         elements.WindowRoot = new Pane();
         elements.WindowRoot.setStyle("-fx-background-color: black");
 
@@ -240,6 +240,52 @@ public class GraphicController {
             }
         });
 
+        elements.BlackSurrender = new Button("投降");
+        elements.RedSurrender = new Button("投降");
+        elements.BlackMenu.getChildren().add(elements.BlackSurrender);
+        elements.RedMenu.getChildren().add(elements.RedSurrender);
+        elements.BlackSurrender.setOnAction(actionEvent -> {
+            if(elements.game.getGameStatus()==GameStatus.ONGOING)
+                elements.game.setGameStatus(GameStatus.RED_WIN);
+            try {
+                GraphicController.refreshWindow(elements);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+        elements.RedSurrender.setOnAction(actionEvent -> {
+            if(elements.game.getGameStatus()==GameStatus.ONGOING)
+                elements.game.setGameStatus(GameStatus.BLACK_WIN);
+            try {
+                GraphicController.refreshWindow(elements);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        elements.BlackAskTie = new Button("求和");
+        elements.RedAskTie = new Button("求和");
+        elements.BlackMenu.getChildren().add(elements.BlackAskTie);
+        elements.RedMenu.getChildren().add(elements.RedAskTie);
+        elements.BlackAskTie.setOnAction(actionEvent -> {
+            if(elements.game.getGameStatus().equals(GameStatus.ONGOING))
+                elements.Dialogue.startTieDialogue(elements,stage);
+            try {
+                GraphicController.refreshWindow(elements);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+        elements.RedAskTie.setOnAction(actionEvent -> {
+            if(elements.game.getGameStatus().equals(GameStatus.ONGOING))
+                elements.Dialogue.startTieDialogue(elements,stage);
+            try {
+                GraphicController.refreshWindow(elements);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+
         elements.SignIn = new Button("登录");
         elements.GameMenu.getChildren().add(elements.SignIn);
         elements.SignIn.setOnAction(actionEvent -> {
@@ -291,14 +337,13 @@ public class GraphicController {
             }
         }else if(elements.game.getGameStatus()==GameStatus.RED_WIN){
             elements.WhosTurn.setText("红方胜利");
-            elements.BlackRegret.setDisable(true);
-            elements.RedRegret.setDisable(true);
+            MenuController.disableAllPlayerButtons(elements);
         }else if(elements.game.getGameStatus()==GameStatus.BLACK_WIN){
             elements.WhosTurn.setText("黑方胜利");
-            elements.BlackRegret.setDisable(true);
-            elements.RedRegret.setDisable(true);
-        }else if(/*在此讨论Stalemate的情况*/false){
-
+            MenuController.disableAllPlayerButtons(elements);
+        }else if(elements.game.getGameStatus()==GameStatus.TIE){
+            elements.WhosTurn.setText("和棋");
+            MenuController.disableAllPlayerButtons(elements);
         }
         if(elements.game.getBoard().moveHistory.isEmpty()==true){
             elements.BlackRegret.setDisable(true);
