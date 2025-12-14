@@ -92,11 +92,17 @@ public class GraphicController {
         elements.rLabel.setStyle("-fx-font-size: 20; -fx-text-fill: red;");
         elements.RedMenu.getChildren().add(elements.rLabel);
 
-
+        //提取登录态
+        elements.userDataKeeper = new UserDataKeeper();
+        elements.Username=elements.userDataKeeper.loadLogState();
         elements.UserLabel = new Label();
-        elements.UserLabel.setText("用户：游客");
+        if(elements.Username.equals(new String(""))){
+            elements.UserLabel.setText("用户：游客");
+        }else{
+            elements.UserLabel.setText("用户："+elements.Username);
+        }
         elements.UserLabel.setStyle("-fx-text-fill:black; -fx-font-size:16;");
-        elements.Username="游客";
+
 
         elements.gLabel = new Label("游戏菜单");
         elements.gLabel.setWrapText(true);
@@ -336,19 +342,24 @@ public class GraphicController {
             }
         });
 
-        elements.SignIn = new Button("登录");
+        elements.SignIn = new Button();
+        if(elements.Username.equals(new String(""))){
+            elements.SignIn.setText("登录");
+        }else {
+            elements.SignIn.setText("注销");
+        }
         elements.GameMenu.getChildren().add(elements.SignIn);
         elements.SignIn.setOnAction(actionEvent -> {
             if(elements.SignIn.getText().equals("登录"))
                 elements.Dialogue.startInputDialogue(elements,"登入","输入用户名","user-name",stage,"Username",Side.BLACK);
             else{
                 elements.Username=new String("游客");
+                elements.userDataKeeper.saveLogState(new String(""));
                 elements.SignIn.setText("登录");
                 try{GraphicController.refreshWindow(elements);}catch (Exception e){};
             }
         });
 
-        elements.userDataKeeper = new UserDataKeeper();
         elements.userDataKeeper.loadField();
         //elements.userDataKeeper.addMd5("ce8385dfd627955cc2fff43ed2d9372c");
         elements.Register = new Button("注册");
@@ -442,7 +453,11 @@ public class GraphicController {
         elements.rLabel.setMaxWidth((elements.GameRoot.getWidth()- BoardWidth)/2-2*ConstantValues.MENU_PADDING);
         elements.gLabel.setMaxWidth((elements.GameRoot.getWidth()- BoardWidth)/2-2*ConstantValues.MENU_PADDING);
 
-        elements.UserLabel.setText("用户："+elements.Username);
+        if(elements.Username.equals(new String(""))){
+            elements.UserLabel.setText("用户：游客");
+        }else {
+            elements.UserLabel.setText("用户：" + elements.Username);
+        }
         //画棋盘
         GridWidth = BoardWidth/10;
         RenderBoard.drawBoard(elements,GridWidth);

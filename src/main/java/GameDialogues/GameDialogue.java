@@ -95,8 +95,11 @@ public class GameDialogue {
             if(typeOfDialogue.equals("Username")){
                 elements.usernameCache=InputField.getText();
                 killDialogue(elements);
-                startInputDialogue(elements,"登入","请输入密码","password",stage,"Password",side);
-
+                if(elements.usernameCache.equals(new String(""))){
+                    QuestionLabel.setText("用户名不能为空");
+                }else{
+                    startInputDialogue(elements,"登入","请输入密码","password",stage,"Password",side);
+                }
             }else if(typeOfDialogue.equals("Password")){
                 elements.passwordCache=InputField.getText();
                 //检验是否密码正确：
@@ -112,10 +115,10 @@ public class GameDialogue {
                 //然后进行文件比对
                 if(elements.userDataKeeper.containMd5(hash)){
                     System.out.println("登陆有效");
+                    elements.userDataKeeper.saveLogState(elements.usernameCache);
                     elements.Username=elements.usernameCache;
                     elements.SignIn.setText("注销");
                     killDialogue(elements);
-
                 }else{
                     System.out.println("账号或密码错误");
                     QuestionLabel.setText("账号或密码错误");
