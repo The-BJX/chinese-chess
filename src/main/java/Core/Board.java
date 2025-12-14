@@ -441,7 +441,7 @@ public class Board {
             }
             else{
                 //Stalemate
-                return currentTurn== Side.RED? 2:1;
+                return currentTurn== Side.RED? 4:3;
             }
         }
         return -1; //-1 for game not over
