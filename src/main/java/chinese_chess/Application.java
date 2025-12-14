@@ -6,14 +6,15 @@ import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import sounds.BackgroundMusicPlayer;
 
 public class Application extends javafx.application.Application {
     GraphicElements elements = new GraphicElements();
+    private BackgroundMusicPlayer musicPlayer = new BackgroundMusicPlayer();
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-
-
+        musicPlayer.startMusic();
         GraphicController.initGraphics(primaryStage,elements);
 
         ChangeListener<Number> sizeListener = (observable, oldValue, newValue) -> {
