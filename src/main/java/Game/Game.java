@@ -2,6 +2,7 @@ package Game;
 //This file is now for test only
 
 import Core.Board;
+import GameDialogues.GameDialogue;
 import GameSave.MoveRecord;
 import data.GameStatus;
 import pieces.Piece;
@@ -28,11 +29,10 @@ public class Game{
     public Game(String user){
         this.user = user;
         gameStatus=GameStatus.ONGOING;
+        board.AnnouncedGameResult(false);
     }
-
     public String user;
     private Board board= new Board(user);
-
 
 
     public static boolean positionInList(Position pos, List<Position> posList){
@@ -95,9 +95,6 @@ public class Game{
                     //Switch turn
                     board.switchTurn();
                     System.out.println("Move successful!");
-
-
-
                     int status= board.judgeGameOver();
                     if(status==1){
                         System.out.println("Red wins!");
@@ -107,13 +104,6 @@ public class Game{
                         System.out.println("Black wins!");
                         setGameStatus(GameStatus.BLACK_WIN);
                     }
-                    else if(status==3){
-                        System.out.println("Red stalemate, Black Wins");//这里应该仔细判断到底是哪边困毙了
-                    }
-                    else if(status==4) {
-                        System.out.println("Black stalemate, Red Wins");
-                    }
-
                 }
                 else{
                     //Deselect the piece if the move is illegal

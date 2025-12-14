@@ -32,6 +32,7 @@ public class GraphicController {
     }
     static void initGraphics(Stage stage, GraphicElements elements) throws Exception {
 
+        elements.stage = stage;
         //先读取登录态再开始游戏
         elements.userDataKeeper = new UserDataKeeper();
         elements.Username=elements.userDataKeeper.loadLogState();
