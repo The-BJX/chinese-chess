@@ -61,9 +61,15 @@ public class MenuController {
             filechooser.setTitle("选取存档");
             File file = filechooser.showOpenDialog(stage);
             System.out.println(file);
-            try{elements.game.getBoard().loadBoardFromFile(elements.Username,file.getPath());}
-            catch (Exception e){
+            try{
+                if(file!=null){
+                    elements.game.getBoard().loadBoardFromFile(elements.Username,file.getPath());
+                }else{
+                    return;
+                }
+            }catch (Exception e){
                 elements.Dialogue.startInfoDialogue(elements,"错误",e.getMessage(),stage);
+                return;
             }
 
             //做加载动作
