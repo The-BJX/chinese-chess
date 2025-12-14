@@ -85,6 +85,15 @@ public class RenderBoard {
         tmp.setFill(Color.web("#FFD963"));
         tmp.setRadius(GridWidth*0.4);
         tmp.setStroke(Paint.valueOf("#000000"));
+        if (type ==PieceType.GENERAL) {
+            for (var u:elements.game.getBoard().getThreatenedPositions(side)){
+                if (u.equals(new Position(x,y))){
+                    tmp.setStroke(Paint.valueOf("#ff0000"));
+                    break;
+                }
+            }
+        }
+
         if(elements.game.getBoard().getSelectedPosition()!=null&&elements.game.getBoard().getSelectedPosition().equals(new Position(x,y))){
             tmp.setStrokeWidth(6);
         }else{
@@ -126,6 +135,7 @@ public class RenderBoard {
             if(false==elements.game.isViewingRecord){
                 try {
                     elements.game.touchPosition(new Position(x,y));
+
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -134,6 +144,7 @@ public class RenderBoard {
             }
             if(elements.game.getBoard().getSelectedPosition()!=null)
                 System.out.printf("What is now selected: %s\n", elements.game.getBoard().getSelectedPosition().toString());
+
             try {
                 GraphicController.refreshWindow(elements);
             } catch (Exception e) {
@@ -166,6 +177,7 @@ public class RenderBoard {
 
         tmp.setOnMouseClicked(event -> {
             event.consume();
+            GameStatus prevStatus = elements.game.getGameStatus();
 
             if(elements.game.getGameStatus()==GameStatus.ONGOING||elements.game.getGameStatus()==GameStatus.ALTERING) {
                 try {
@@ -179,6 +191,14 @@ public class RenderBoard {
                     GraphicController.refreshWindow(elements);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
+                }
+            }
+            if(elements.game.getGameStatus().equals(prevStatus)==false){
+                if(elements.game.getGameStatus().equals(GameStatus.RED_WIN)){
+                    elements.Dialogue.startInfoDialogue(elements,"将死","红方胜利",elements.stage);
+                }
+                if(elements.game.getGameStatus().equals(GameStatus.BLACK_WIN)){
+                    elements.Dialogue.startInfoDialogue(elements,"将死","黑方胜利",elements.stage);
                 }
             }
         });

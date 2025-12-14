@@ -13,6 +13,7 @@ public class Application extends javafx.application.Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
+
         GraphicController.initGraphics(primaryStage,elements);
 
         ChangeListener<Number> sizeListener = (observable, oldValue, newValue) -> {

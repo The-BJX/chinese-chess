@@ -12,9 +12,11 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 
 public class GraphicElements {
     public Pane WindowRoot;
+    Stage stage;
     Pane GameRoot;
     Pane ChessBoard;
     Pane PlayerBlack;

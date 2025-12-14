@@ -39,6 +39,7 @@ public class MenuController {
             //elements.GameMenu.getChildren().remove(elements.NewGame);
             //elements.GameMenu.getChildren().remove(elements.LoadFromSave);
             //开个输入框，然后读取文件
+            elements.game=new Game(elements.Username);
             FileChooser filechooser= new FileChooser();
             filechooser.setTitle("选取存档");
             File file = filechooser.showOpenDialog(stage);
@@ -54,6 +55,7 @@ public class MenuController {
 
             GraphicController.refreshWindow(elements);
         }else if(type==TypeOfInit.ViewRecord){
+            elements.game=new Game(elements.Username);
             System.out.println("复盘开始");
             FileChooser filechooser= new FileChooser();
             filechooser.setTitle("选取存档");

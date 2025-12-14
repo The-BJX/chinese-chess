@@ -130,10 +130,14 @@ public class Board {
         }
 
     }
-
-
+    private boolean haveAnnouncedGameResult;
+    public boolean haveIAnnouncedGameResult() {
+        return haveAnnouncedGameResult;
+    }
+    public void AnnouncedGameResult(boolean haveAnnouncedGameResult) {
+        this.haveAnnouncedGameResult = haveAnnouncedGameResult;
+    }
     // save and load functions
-
     public void loadBoardFromFile(String username,String path) throws Exception {
         List<MoveRecord> tempMoveHistory;
         try {
