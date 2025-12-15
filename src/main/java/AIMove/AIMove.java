@@ -13,6 +13,8 @@ import java.util.List;
  * Simple AI that searches to a fixed depth using negamax with alpha-beta.
  * This implementation copies the board for each simulated move (non-destructive).
  */
+
+// this algorithm partly come from internet
 public class AIMove {
     private final int maxDepth;
     private static final int MATE_SCORE = 1000000;
