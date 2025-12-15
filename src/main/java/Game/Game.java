@@ -4,6 +4,7 @@ package Game;
 import Core.Board;
 import GameDialogues.GameDialogue;
 import GameSave.MoveRecord;
+import chinese_chess.GraphicElements;
 import data.GameStatus;
 import pieces.Piece;
 import data.Position;
@@ -27,11 +28,13 @@ public class Game{
         return gameStatus;
     }
     public boolean isViewingRecord;
-    public Game(String username){
+    GraphicElements elements;
+    public Game(String username, GraphicElements elements){
         board= new Board(username);
         gameStatus=GameStatus.ONGOING;
         board.AnnouncedGameResult(false);
         this.user=username;
+        this.elements=elements;
     }
 
     public String user;
@@ -99,6 +102,10 @@ public class Game{
                     board.switchTurn();
                     System.out.println("Move successful!");
                     int status = board.judgeGameOver();
+                    GameStatus prevStatus=null;
+                    if(elements!=null){
+                        prevStatus = elements.game.getGameStatus();
+                    }
                     if (status == 1) {
                         System.out.println("Red wins!");
                         setGameStatus(GameStatus.RED_WIN);
@@ -111,6 +118,21 @@ public class Game{
                     } else if (status == 4) {
                         System.out.println("Black wins! (Stale)");
                         setGameStatus(GameStatus.BLACK_WIN_STALE);
+                    }
+
+                    if(elements!=null&&elements.game.getGameStatus().equals(prevStatus)==false){
+                        if(elements.game.getGameStatus().equals(GameStatus.RED_WIN)){
+                            elements.Dialogue.startInfoDialogue(elements,"将死","红方胜利",elements.stage);
+                        }
+                        if(elements.game.getGameStatus().equals(GameStatus.BLACK_WIN)){
+                            elements.Dialogue.startInfoDialogue(elements,"将死","黑方胜利",elements.stage);
+                        }
+                        if(elements.game.getGameStatus().equals(GameStatus.RED_WIN_STALE)){
+                            elements.Dialogue.startInfoDialogue(elements,"困毙","红方胜利",elements.stage);
+                        }
+                        if(elements.game.getGameStatus().equals(GameStatus.BLACK_WIN_STALE)){
+                            elements.Dialogue.startInfoDialogue(elements,"困毙","黑方胜利",elements.stage);
+                        }
                     }
                 }
                 else{

@@ -36,7 +36,7 @@ public class GraphicController {
         //先读取登录态再开始游戏
         elements.userDataKeeper = new UserDataKeeper();
         elements.Username=elements.userDataKeeper.loadLogState();
-        elements.game=new Game(elements.Username);
+        elements.game=new Game(elements.Username,elements);
 
 
         elements.WindowRoot = new Pane();

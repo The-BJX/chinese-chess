@@ -20,7 +20,7 @@ public class MenuController {
     static void initGame(Stage stage, GraphicElements elements, TypeOfInit type) throws Exception {
         if(type==TypeOfInit.General){
             System.out.println("Starting New Game");
-            elements.game=new Game(elements.Username);
+            elements.game=new Game(elements.Username,elements);
             //elements.GameMenu.getChildren().remove(elements.NewGame);
             //elements.GameMenu.getChildren().remove(elements.LoadFromSave);
             if(false==elements.GameMenu.getChildren().contains(elements.WhosTurn))
@@ -39,7 +39,7 @@ public class MenuController {
             //elements.GameMenu.getChildren().remove(elements.NewGame);
             //elements.GameMenu.getChildren().remove(elements.LoadFromSave);
             //开个输入框，然后读取文件
-            elements.game=new Game(elements.Username);
+            elements.game=new Game(elements.Username,elements);
             FileChooser filechooser= new FileChooser();
             filechooser.setTitle("选取存档");
             File file = filechooser.showOpenDialog(stage);
@@ -55,7 +55,7 @@ public class MenuController {
 
             GraphicController.refreshWindow(elements);
         }else if(type==TypeOfInit.ViewRecord){
-            elements.game=new Game(elements.Username);
+            elements.game=new Game(elements.Username,elements);
             System.out.println("复盘开始");
             FileChooser filechooser= new FileChooser();
             filechooser.setTitle("选取存档");

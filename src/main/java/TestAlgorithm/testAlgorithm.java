@@ -14,7 +14,7 @@ public class testAlgorithm {
     public static void main(String[] args) throws Exception {
         System.out.println("Hello and welcome!");
 
-        Game game = new Game("testa");
+        Game game = new Game("testa",null);
         game.printBoard();
 
         System.out.printf("Now it is %s's turn",game.getBoard().getCurrentTurn());

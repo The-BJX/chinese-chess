@@ -16,7 +16,7 @@ import javafx.stage.Stage;
 
 public class GraphicElements {
     public Pane WindowRoot;
-    Stage stage;
+    public Stage stage;
     Pane GameRoot;
     Pane ChessBoard;
     Pane PlayerBlack;

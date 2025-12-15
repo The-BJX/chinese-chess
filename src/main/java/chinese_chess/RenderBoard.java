@@ -177,7 +177,6 @@ public class RenderBoard {
 
         tmp.setOnMouseClicked(event -> {
             event.consume();
-            GameStatus prevStatus = elements.game.getGameStatus();
 
             if(elements.game.getGameStatus()==GameStatus.ONGOING||elements.game.getGameStatus()==GameStatus.ALTERING) {
                 try {
@@ -193,20 +192,7 @@ public class RenderBoard {
                     throw new RuntimeException(e);
                 }
             }
-            if(elements.game.getGameStatus().equals(prevStatus)==false){
-                if(elements.game.getGameStatus().equals(GameStatus.RED_WIN)){
-                    elements.Dialogue.startInfoDialogue(elements,"将死","红方胜利",elements.stage);
-                }
-                if(elements.game.getGameStatus().equals(GameStatus.BLACK_WIN)){
-                    elements.Dialogue.startInfoDialogue(elements,"将死","黑方胜利",elements.stage);
-                }
-                if(elements.game.getGameStatus().equals(GameStatus.RED_WIN_STALE)){
-                    elements.Dialogue.startInfoDialogue(elements,"困毙","红方胜利",elements.stage);
-                }
-                if(elements.game.getGameStatus().equals(GameStatus.BLACK_WIN_STALE)){
-                    elements.Dialogue.startInfoDialogue(elements,"困毙","黑方胜利",elements.stage);
-                }
-            }
+
         });
     }
     public static void drawShadow(GraphicElements elements, int x, int y, double GridWidth){
