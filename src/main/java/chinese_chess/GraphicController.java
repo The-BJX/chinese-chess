@@ -426,10 +426,10 @@ public class GraphicController {
         if(elements.game.getGameStatus()== GameStatus.ONGOING){
             elements.Altermode.setText("摆棋");
             MenuController.activatePlayerButtons(elements);
-        }else if(elements.game.getGameStatus()==GameStatus.RED_WIN){
+        }else if(elements.game.getGameStatus()==GameStatus.RED_WIN||elements.game.getGameStatus()==GameStatus.RED_WIN_STALE){
             elements.WhosTurn.setText("红方胜利");
             MenuController.disableAllPlayerButtons(elements);
-        }else if(elements.game.getGameStatus()==GameStatus.BLACK_WIN){
+        }else if(elements.game.getGameStatus()==GameStatus.BLACK_WIN||elements.game.getGameStatus()==GameStatus.BLACK_WIN_STALE){
             elements.WhosTurn.setText("黑方胜利");
             MenuController.disableAllPlayerButtons(elements);
         }else if(elements.game.getGameStatus()==GameStatus.TIE){

@@ -200,6 +200,12 @@ public class RenderBoard {
                 if(elements.game.getGameStatus().equals(GameStatus.BLACK_WIN)){
                     elements.Dialogue.startInfoDialogue(elements,"将死","黑方胜利",elements.stage);
                 }
+                if(elements.game.getGameStatus().equals(GameStatus.RED_WIN_STALE)){
+                    elements.Dialogue.startInfoDialogue(elements,"困毙","红方胜利",elements.stage);
+                }
+                if(elements.game.getGameStatus().equals(GameStatus.BLACK_WIN_STALE)){
+                    elements.Dialogue.startInfoDialogue(elements,"困毙","黑方胜利",elements.stage);
+                }
             }
         });
     }

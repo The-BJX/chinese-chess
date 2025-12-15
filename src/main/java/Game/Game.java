@@ -26,6 +26,7 @@ public class Game{
     public GameStatus getGameStatus(){
         return gameStatus;
     }
+    public boolean isViewingRecord;
     public Game(String username){
         board= new Board(username);
         gameStatus=GameStatus.ONGOING;
@@ -86,25 +87,30 @@ public class Game{
             else{
                 //Try to move the piece to the new position
                 List<Position> legalMoves=selectedPiece.getLegalMoves(board,selectedPosition);
-                if(positionInList(position,legalMoves)||getGameStatus()==GameStatus.ALTERING){
+                if(positionInList(position,legalMoves)||getGameStatus()==GameStatus.ALTERING) {
                     //Move is legal
-                    board.movePiece(selectedPosition,position,true, isGuest);
+                    board.movePiece(selectedPosition, position, true, isGuest);
                     //Deselect the piece after moving
                     board.setSelectedPosition(null);
-                    selectedPiece.isSelected=false;
+                    selectedPiece.isSelected = false;
 
 
                     //Switch turn
                     board.switchTurn();
                     System.out.println("Move successful!");
-                    int status= board.judgeGameOver();
-                    if(status==1){
+                    int status = board.judgeGameOver();
+                    if (status == 1) {
                         System.out.println("Red wins!");
                         setGameStatus(GameStatus.RED_WIN);
-                    }
-                    else if(status==2){
+                    } else if (status == 2) {
                         System.out.println("Black wins!");
                         setGameStatus(GameStatus.BLACK_WIN);
+                    } else if (status == 3) {
+                        System.out.println("Red wins! (Stale)");
+                        setGameStatus(GameStatus.RED_WIN_STALE);
+                    } else if (status == 4) {
+                        System.out.println("Black wins! (Stale)");
+                        setGameStatus(GameStatus.BLACK_WIN_STALE);
                     }
                 }
                 else{
@@ -115,7 +121,5 @@ public class Game{
                 }
             }
         }
-
     }
-    public boolean isViewingRecord;
 }
