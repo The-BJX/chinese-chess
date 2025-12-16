@@ -13,6 +13,7 @@ import data.Position;
 import javafx.geometry.Pos;
 import pieces.GeneralPiece;
 import pieces.Piece;
+import sounds.GameSoundFX;
 
 import java.util.List;
 
@@ -45,6 +46,8 @@ public class Board {
     public int currentViewingStep=0;
 
     public final String username;
+
+    private GameSoundFX soundFX = new GameSoundFX();
 
 
     public Board(String username){
@@ -288,6 +291,11 @@ public class Board {
 
             if(false==isGuest)this.autoSaveBoard(username);
             currentViewingStep=moveHistory.size();
+
+            soundFX.playMoveSound();
+            if(isGeneralInCheck(currentTurn.opposite())){
+                soundFX.playCheckSound();
+            }
         }
 
     }
@@ -459,6 +467,7 @@ public class Board {
             selectedPosition = position;
             piece.isSelected = true;
         }
+
     }
 
     public void deselect() {
@@ -469,6 +478,7 @@ public class Board {
             }
             selectedPosition = null;
         }
+
     }
 
     public Position getSelectedPosition() {

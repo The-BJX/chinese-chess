@@ -22,7 +22,7 @@ public class BackgroundMusicPlayer {
             mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
 
             // Set volume (optional)
-            mediaPlayer.setVolume(0.4);
+            mediaPlayer.setVolume(0.2);
 
             // 4. Start playback
             mediaPlayer.play();
