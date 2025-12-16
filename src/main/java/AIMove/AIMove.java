@@ -16,7 +16,7 @@ import java.util.List;
 
 // this algorithm partly come from internet
 public class AIMove {
-    private final int maxDepth;
+    private int maxDepth;
     private static final int MATE_SCORE = 1000000;
     private MoveRecord curSuggestedMove;
     public MoveRecord getCurSuggestedMove() {
@@ -27,6 +27,9 @@ public class AIMove {
     }
     public AIMove(int maxDepth){
         this.maxDepth = Math.max(1, maxDepth);
+    }
+    public void setMaxDepth(int depth){
+        this.maxDepth=Math.max(1, depth);
     }
 
 
