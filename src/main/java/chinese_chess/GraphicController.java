@@ -8,8 +8,10 @@ import UserData.UserDataKeeper;
 import data.GameStatus;
 import data.Position;
 import data.Side;
+import javafx.collections.ListChangeListener;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
@@ -85,6 +87,9 @@ public class GraphicController {
         elements.RedMenu.setPadding(new Insets(MENU_PADDING,MENU_PADDING,MENU_PADDING,MENU_PADDING));
         elements.GameMenu = new VBox();
         elements.GameMenu.setPadding(new Insets(MENU_PADDING,MENU_PADDING,MENU_PADDING,MENU_PADDING));
+
+        elements.BlackMenu.setSpacing(MENU_PADDING);
+        elements.RedMenu.setSpacing(MENU_PADDING);
 
         elements.PlayerBlack.getChildren().add(elements.BlackMenu);
         elements.PlayerRed.getChildren().add(elements.RedMenu);
@@ -265,14 +270,15 @@ public class GraphicController {
                 throw new RuntimeException(e);
             }
         });
-
         elements.BlackSurrender = new Button("投降");
         elements.RedSurrender = new Button("投降");
         elements.BlackMenu.getChildren().add(elements.BlackSurrender);
         elements.RedMenu.getChildren().add(elements.RedSurrender);
         elements.BlackSurrender.setOnAction(actionEvent -> {
-            if(elements.game.getGameStatus()==GameStatus.ONGOING)
+            if(elements.game.getGameStatus()==GameStatus.ONGOING) {
+                elements.Dialogue.startInfoDialogue(elements,"投降","红方胜利",stage);
                 elements.game.setGameStatus(GameStatus.RED_WIN);
+            }
             try {
                 GraphicController.refreshWindow(elements);
             } catch (Exception e) {
@@ -280,8 +286,10 @@ public class GraphicController {
             }
         });
         elements.RedSurrender.setOnAction(actionEvent -> {
-            if(elements.game.getGameStatus()==GameStatus.ONGOING)
+            if(elements.game.getGameStatus()==GameStatus.ONGOING) {
+                elements.Dialogue.startInfoDialogue(elements, "投降", "黑方胜利", stage);
                 elements.game.setGameStatus(GameStatus.BLACK_WIN);
+            }
             try {
                 GraphicController.refreshWindow(elements);
             } catch (Exception e) {
@@ -294,8 +302,9 @@ public class GraphicController {
         elements.BlackMenu.getChildren().add(elements.BlackAskTie);
         elements.RedMenu.getChildren().add(elements.RedAskTie);
         elements.BlackAskTie.setOnAction(actionEvent -> {
-            if(elements.game.getGameStatus().equals(GameStatus.ONGOING))
-                elements.Dialogue.startTieDialogue(elements,stage);
+            if(elements.game.getGameStatus().equals(GameStatus.ONGOING)) {
+                elements.Dialogue.startTieDialogue(elements, stage);
+            }
             try {
                 GraphicController.refreshWindow(elements);
             } catch (Exception e) {
@@ -420,6 +429,18 @@ public class GraphicController {
                 throw new RuntimeException(e);
             }
         });
+        elements.DifficultyChoice = new ComboBox<String>();
+        elements.DifficultyChoice.getItems().addAll("1 - 草履虫","2 - 蛇鼠","3 - 人类","4 - 柯洁(长考)","5 - 邪神(一年下一步)","6 - 上帝(别等，相信我)");
+        elements.DifficultyChoice.setValue("人机难度");
+        elements.GameMenu.getChildren().add(elements.DifficultyChoice);
+        elements.DifficultyChoice.valueProperty().addListener(change -> {
+            int curdiff = Integer.parseInt(String.valueOf(elements.DifficultyChoice.getValue().charAt(0)));
+            elements.aiMove.setMaxDepth(curdiff);
+            System.out.println(curdiff);
+        });
+
+
+
     }
 
     public static void refreshWindow(GraphicElements elements) throws Exception {
@@ -473,6 +494,8 @@ public class GraphicController {
         elements.bLabel.setMaxWidth((elements.GameRoot.getWidth()- BoardWidth)/2-2*ConstantValues.MENU_PADDING);
         elements.rLabel.setMaxWidth((elements.GameRoot.getWidth()- BoardWidth)/2-2*ConstantValues.MENU_PADDING);
         elements.gLabel.setMaxWidth((elements.GameRoot.getWidth()- BoardWidth)/2-2*ConstantValues.MENU_PADDING);
+
+        elements.DifficultyChoice.setPrefWidth(0.8*(elements.GameRoot.getWidth()- BoardWidth)/2);
 
         if(elements.Username.equals(new String(""))){
             elements.UserLabel.setText("用户：游客");

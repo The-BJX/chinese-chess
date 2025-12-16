@@ -99,7 +99,9 @@ public class Game{
 
 
                     //Switch turn
-                    board.switchTurn();
+                    if(elements.game.getGameStatus()!=GameStatus.ALTERING){
+                        board.switchTurn();
+                    }
                     System.out.println("Move successful!");
                     int status = board.judgeGameOver();
                     GameStatus prevStatus=null;

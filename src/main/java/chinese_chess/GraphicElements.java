@@ -13,6 +13,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.scene.control.ComboBox;
 
 public class GraphicElements {
     public Pane WindowRoot;
@@ -68,4 +69,6 @@ public class GraphicElements {
     public Button BlackAIAssist, RedAIAssist;
 
     public Button Altermode;//摆棋
+
+    public ComboBox<String> DifficultyChoice;
 }

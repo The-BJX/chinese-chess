@@ -254,6 +254,8 @@ public class GameDialogue {
             //同意平局
             elements.game.setGameStatus(GameStatus.TIE);
             killDialogue(elements);
+            elements.Dialogue.startInfoDialogue(elements,"和棋","双方议和",stage);
+
             try{GraphicController.refreshWindow(elements);}catch(Exception e){}
         });
         CancelButton.setOnAction(actionEvent -> {
