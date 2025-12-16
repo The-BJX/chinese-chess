@@ -54,9 +54,14 @@ public class MenuController {
             try{
                 if(file!=null){
                     try{
+                        Game preGame = elements.game;
                         elements.game.getBoard().checkBoardFromFile(elements.Username,file.getPath());
                         elements.game=new Game(elements.Username,elements);
                         elements.game.getBoard().loadBoardFromFile(elements.Username,file.getPath());
+                        if(elements.game.getBoard().judgeGameOver()>0){
+                            elements.game=preGame;
+                            elements.Dialogue.startInfoDialogue(elements,"错误","已经结束的局面只能复盘不能继续",stage);
+                        }
                     }catch(Exception e){
                         throw e;
                     }
