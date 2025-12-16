@@ -141,7 +141,7 @@ public class Board {
         this.haveAnnouncedGameResult = haveAnnouncedGameResult;
     }
     // save and load functions
-    public void loadBoardFromFile(String username,String path) throws Exception {
+    public void checkBoardFromFile(String username,String path) throws Exception {
         List<MoveRecord> tempMoveHistory;
         try {
             tempMoveHistory = dataSaver.loadGameData(username, path);
@@ -150,9 +150,12 @@ public class Board {
         }
         if(tempMoveHistory==null){
             System.out.println("load failed");
-            return;
+            throw new Exception("移动序列不能为空");
         }
 
+
+    }
+    public void loadBoardFromFile(String username, String path) throws Exception {
         moveHistory=dataSaver.loadGameData(username,path);
 
 
