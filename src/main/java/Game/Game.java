@@ -8,11 +8,14 @@ import chinese_chess.GraphicElements;
 import data.GameStatus;
 import pieces.Piece;
 import data.Position;
+import sounds.GameSoundFX;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Game{
+
+    private GameSoundFX soundFX = new GameSoundFX();
 
     public void printBoard(){
         board.printBoard();
@@ -68,6 +71,7 @@ public class Game{
             if(tempPiece.side==board.getCurrentTurn()){
                 //Select this piece
                 board.setSelectedPosition(position);
+                soundFX.playSelectSound();
             }
             if(getGameStatus()==GameStatus.ALTERING){
                 board.setSelectedPosition(position);
@@ -82,6 +86,7 @@ public class Game{
                 //Deselect the piece
                 board.setSelectedPosition(null);
                 selectedPiece.isSelected=false;
+                soundFX.playDeselectSound();
             }
             else if(board.getPieceAt(position)!=null&&selectedPiece.side.equals(board.getPieceAt(position).side)&&getGameStatus()!=GameStatus.ALTERING){
                 board.setSelectedPosition(position);
@@ -141,6 +146,7 @@ public class Game{
                     //Deselect the piece if the move is illegal
                     board.setSelectedPosition(null);
                     selectedPiece.isSelected=false;
+                    soundFX.playDeselectSound();
                     System.out.println("Illegal move!");
                 }
             }

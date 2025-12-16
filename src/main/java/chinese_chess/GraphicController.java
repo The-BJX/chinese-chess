@@ -19,8 +19,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import sounds.GameSoundFX;
 
 public class GraphicController {
+    private static GameSoundFX soundFX = new GameSoundFX();
     static private double MENU_PADDING = ConstantValues.MENU_PADDING;
     private static GridPoint Selection = new GridPoint(-1,-1);
     static double GridWidth=1.0;
@@ -56,6 +58,7 @@ public class GraphicController {
         elements.ChessBoard.setOnMouseClicked(mouseEvent -> {
             setSelection(new GridPoint(-1,-1));
             System.out.println("Selection canceled when clicking board");
+            soundFX.playDeselectSound();
             if(elements.game.getBoard().getSelectedPosition()!=null){
                 elements.game.getBoard().getPieceAt(elements.game.getBoard().getSelectedPosition()).isSelected=false;
                 elements.game.getBoard().setSelectedPosition(null);

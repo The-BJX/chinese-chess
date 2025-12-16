@@ -85,7 +85,7 @@ public class RenderBoard {
         tmp.setFill(Color.web("#FFD963"));
         tmp.setRadius(GridWidth*0.4);
         tmp.setStroke(Paint.valueOf("#000000"));
-        if (type ==PieceType.GENERAL) {
+        if (type == PieceType.GENERAL) {
             for (var u:elements.game.getBoard().getThreatenedPositions(side)){
                 if (u.equals(new Position(x,y))){
                     tmp.setStroke(Paint.valueOf("#ff0000"));
